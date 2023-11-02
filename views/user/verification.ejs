@@ -1,0 +1,80 @@
+<%- include('../layout/userLayout/userHeaderMini.ejs') %>
+
+<body>
+  <div class="container-xxl position-relative bg-white d-flex p-0">
+    <!-- Spinner Start -->
+    <div
+      id="spinner"
+      class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center"
+    >
+      <div
+        class="spinner-border text-primary"
+        style="width: 3rem; height: 3rem"
+        role="status"
+      >
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+    <!-- Spinner End -->
+
+    <!-- Sign Up Start -->
+    <div class="container-fluid">
+      <form action="/verification" method="post">
+        <div
+          class="row h-100 align-items-center justify-content-center"
+          style="min-height: 10vh"
+        >
+          <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
+            <div class="bg-light rounded p-4 p-sm-5 my-4 mx-3">
+              <div class="mb-3" style="display: flex; justify-content: center">
+                <a href="#" class="">
+                  <h3 class="text-primary">Verification</h3>
+                </a>
+              </div>
+
+              <div class="form-floating mb-3">
+                <input
+                  type="email"
+                  name="email"
+                  class="form-control"
+                  id="floatingInput"
+                  placeholder=""
+                  required
+                />
+                <label for="floatingInput">Email address</label>
+              </div>
+
+              <a href="">
+                <button
+                  type="submit"
+                  value="Send Verification Link"
+                  class="btn btn-primary py-3 w-100 mb-4"
+                >
+                  Send verification Link
+                </button></a
+              >
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Sign Up End -->
+  </div>
+
+  <% if (typeof message !== 'undefined') { %>
+  <p
+    style="
+      color: rgb(196, 0, 0);
+      font-weight: 500;
+      display: flex;
+      justify-content: center;
+      background-color: #fefbfa;
+      padding: 10px;
+      border-radius: 5px;
+    "
+  >
+    <%= message %>
+  </p>
+  <% } %> <%- include('../layout/userLayout/userFooter.ejs') %>
+</body>

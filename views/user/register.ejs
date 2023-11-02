@@ -1,0 +1,284 @@
+<%- include('../layout/userLayout/userHeaderMini.ejs') %>
+
+<body>
+  <div class="container-xxl position-relative bg-white d-flex p-0">
+    <!-- Spinner Start -->
+    <div
+      id="spinner"
+      class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center"
+    >
+      <div
+        class="spinner-border text-primary"
+        style="width: 3rem; height: 3rem"
+        role="status"
+      >
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+    <!-- Spinner End -->
+
+    <!-- Sign Up Start -->
+    <div class="container-fluid">
+      <form action="/register" method="POST">
+        <div
+          class="row h-100 align-items-center justify-content-center"
+          style="min-height: 80vh"
+        >
+          <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
+            <div class="bg-light rounded p-4 p-sm-5 my-4 mx-3">
+              <div class="mb-3" style="display: flex; justify-content: center">
+                <a href="" class="">
+                  <h3 class="text-primary">Register</h3>
+                </a>
+              </div>
+              <div class="form-floating mb-3">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="floatingText"
+                  name="name"
+                  placeholder="Enter Name"
+                  required
+                />
+
+              </div>
+              <p id="errorName" style="color: red"></p>
+
+              <div class="form-floating mb-3">
+                <input
+                  type="number"
+                  class="form-control"
+                  name="Ph_number"
+                  id="floatingNumber"
+                  placeholder="Enter Mobile Number"
+                  required
+                />
+              </div>
+              <p id="errorMsg" style="color: red"></p>
+
+              <div class="form-floating mb-3">
+                <input
+                  type="email"
+                  class="form-control"
+                  name="email"
+                  id="floatingMail"
+                  placeholder="Enter Email"
+                  required
+                />
+              </div>
+              <p id="errorMail" style="color: red"></p>
+
+
+              <div class="form-floating mb-4">
+                <div class="input-group">
+                  <input
+                    type="password"
+                    class="form-control"
+                    name="password"
+                    id="floatingPassword"
+                    placeholder="Enter Password"
+                    required
+                  />
+                  <span
+                    class="input-group-text"
+                    id="togglePassword"
+                    onclick="togglePasswordVisibility()"
+                  >
+                    <!-- Font Awesome eye icons -->
+                    <i class="fas fa-eye" id="showIcon"></i>
+                    <i
+                      class="fas fa-eye-slash"
+                      id="hideIcon"
+                      style="display: none"
+                    ></i>
+                  </span>
+                </div>
+              </div>
+              <p id="errorPassword" style="color: red"></p>
+              <style>
+                .input-group-text {
+                  cursor: pointer;
+                }
+              </style>
+              <button
+                type="submit"
+                value="Register"
+                class="btn btn-primary py-3 w-100 mb-4"
+              >
+                Sign Up
+              </button>
+              <p class="text-center mb-0">
+                Already have an Account? <a href="/login">Sign In</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <!-- Sign Up End -->
+  </div>
+
+  <% if (typeof message !== 'undefined') { %>
+  <p
+    style="
+      color: rgb(196, 0, 0);
+      font-weight: 500;
+      display: flex;
+      justify-content: center;
+      background-color: #fefbfa;
+      padding: 10px;
+      border-radius: 5px;
+    "
+  >
+    <%= message %>
+  </p>
+  <% } %>
+
+  <div></div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const numberInputElement = document.getElementById("floatingNumber");
+      const errorMsgElement = document.getElementById("errorMsg");
+
+      numberInputElement.addEventListener("input", function () {
+        const numberValue = numberInputElement.value.trim();
+
+        if (numberValue.length !== 10) {
+          numberInputElement.setCustomValidity(
+            "Mobile number must be exactly 10 digits."
+          );
+          errorMsgElement.textContent =
+            "Mobile number must be exactly 10 digits.";
+        } else {
+          numberInputElement.setCustomValidity("");
+          errorMsgElement.textContent = "";
+        }
+      });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const nameInputElement = document.getElementById("floatingText");
+      const errorNameElement = document.getElementById("errorName");
+
+      nameInputElement.addEventListener("input", function () {
+        const nameValue = nameInputElement.value.trim();
+
+        if (!/^[a-zA-Z\s]+$/.test(nameValue)) {
+          nameInputElement.setCustomValidity(
+            "Please enter a valid name with only letters"
+          );
+          errorNameElement.textContent =
+            "Please enter a valid name with only letters";
+        } else if (nameValue.length < 4) {
+          nameInputElement.setCustomValidity(
+            "Please enter a name with more than 3 letters"
+          );
+          errorNameElement.textContent =
+            "Please enter a name with more than 3 letters";
+        } else {
+          nameInputElement.setCustomValidity("");
+          errorNameElement.textContent = "";
+        }
+      });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const emailInputElement = document.getElementById("floatingMail");
+      const errorMailElement = document.getElementById("errorMail");
+
+      emailInputElement.addEventListener("input", function () {
+        const emailValue = emailInputElement.value.trim();
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+        if (!emailRegex.test(emailValue)) {
+          emailInputElement.setCustomValidity(
+            "Please enter a valid email address"
+          );
+          errorMailElement.textContent = "Please enter a valid email address";
+        } else {
+          emailInputElement.setCustomValidity("");
+          errorMailElement.textContent = "";
+        }
+      });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const passwordInputElement = document.getElementById("floatingPassword");
+      const errorPasswordElement = document.getElementById("errorPassword");
+
+      passwordInputElement.addEventListener("input", function () {
+        const passwordValue = passwordInputElement.value;
+
+        // Check if the password is at least 15 characters long
+        if (passwordValue.length < 8) {
+          passwordInputElement.setCustomValidity(
+            "Password must be at least 8 characters long"
+          );
+          errorPasswordElement.textContent =
+            "Password must be at least 8 characters long";
+        } else if (
+          !containsUppercase(passwordValue) ||
+          !containsLowercase(passwordValue) ||
+          !containsNumber(passwordValue) ||
+          !containsSpecialCharacter(passwordValue)
+        ) {
+          passwordInputElement.setCustomValidity(
+            "Password must include at least one uppercase letter, one lowercase letter, one number, and one special character"
+          );
+          errorPasswordElement.textContent =
+            "Password must include at least one uppercase letter, one lowercase letter, one number, and one special character";
+        } else {
+          passwordInputElement.setCustomValidity("");
+          errorPasswordElement.textContent = "";
+        }
+      });
+
+      togglePasswordButton.addEventListener("click", function () {
+        togglePasswordVisibility();
+      });
+
+      // Helper functions
+      function containsUppercase(str) {
+        return /[A-Z]/.test(str);
+      }
+
+      function containsLowercase(str) {
+        return /[a-z]/.test(str);
+      }
+
+      function containsNumber(str) {
+        return /\d/.test(str);
+      }
+
+      function containsSpecialCharacter(str) {
+        return /[!@#$%^&*(),.?":{}|<>]/.test(str);
+      }
+    });
+
+    function togglePasswordVisibility() {
+      const passwordInput = document.getElementById("floatingPassword");
+      const showIcon = document.getElementById("showIcon");
+      const hideIcon = document.getElementById("hideIcon");
+
+      if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        showIcon.style.display = "none";
+        hideIcon.style.display = "inline";
+      } else {
+        passwordInput.type = "password";
+        showIcon.style.display = "inline";
+        hideIcon.style.display = "none";
+      }
+    }
+  </script>
+  <style>
+    /* Hide number input spinner arrows */
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  </style>
+
+  <%- include('../layout/userLayout/userFooter.ejs') %>
+</body>

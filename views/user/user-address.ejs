@@ -1,0 +1,671 @@
+<%-include('../layout/userLayout/userHeaderMini.ejs') %>
+
+      <!-- Include SweetAlert2 CSS -->
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+
+      <!-- Include jQuery -->
+      <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+      
+      <!-- Include SweetAlert2 script -->
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<body>
+    <div>
+      <a href="#" class="btn btn-light box-link" style="margin-top: 20px; margin-left: 30px; margin-bottom: 20px;" onclick="goBackUsingLocalStorage()">
+        <span class="text-gradient"><i class="fa fa-arrow-left" aria-hidden="true"></i>Go back</span>
+    </a>
+<script>
+  function goBackUsingLocalStorage() {
+  // Get the saved route from local storage
+  const savedRoute = localStorage.getItem('previousRoute');
+  console.log("kittiyo");
+
+  if (savedRoute) {
+    // Navigate to the saved route
+    window.location.href = savedRoute;
+    localStorage.removeItem('previousRoute');
+  } else {
+    // Provide a default behavior (e.g., navigate to a fallback route)
+    window.location.href = '/loadUserProfile';
+  }
+}
+
+</script>    
+</div>
+    <div class="py-5">
+      <div class="container">
+        <br>
+
+
+        
+
+          <% if (userAddress && userAddress.length > 0) { %>
+          <% userAddress.forEach((address) => { %>
+      <div class="card" style="font-family: sans-serif; color: black  ;">
+        <div class="card-body">
+          
+          <div style="display: flex; justify-content: end;">
+            <button type="button" class="btn btn-outline-danger " onclick="handleDelete('<%= address.id %>' )">X</button>
+      </div>
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+  
+function handleDelete(addressId) {
+  Swal.fire({
+    title: 'Are you sure?',
+    text: 'You won\'t be able to revert this!',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Make an AJAX request to the delete route
+      $.ajax({
+        url: `/removeAddress/${addressId}?addressId=${addressId}`,  // Include addressId as a query parameter
+        type: 'DELETE',
+        success: function (data) {
+          // Handle success response here
+          console.log(data);
+          Swal.fire('Deleted!', 'Address has been removed.', 'success');
+          location.reload();
+        },
+        error: function (error) {
+          // Handle error response here
+          console.error(error);
+          Swal.fire('Error', 'Failed to remove address.', 'error');
+        }
+      });
+    }
+  });
+}
+
+
+function setDefaultAddress(addressId) {
+  
+  // Make an AJAX request to set the default address
+  $.ajax({
+    url: `/setDefaultAddress/${addressId}?addressId=${addressId}`,
+    type: 'PUT',
+    success: function (data) {
+      console.log(data);
+      const buttonElement = document.getElementById('defaultButton');
+
+      if (data.success) {
+        // Update the button color
+        buttonElement.classList.remove('btn-warning');
+        buttonElement.classList.add('btn-outline-dark');
+
+        // Check if the address is now the default one
+        const isDefault = data.default;
+
+        // Update the button text and style based on the 'isDefault' value
+        if (isDefault) {
+          buttonElement.textContent = 'Default';
+          buttonElement.classList.remove('btn-outline-dark');
+          buttonElement.classList.add('btn-warning'); // Add the 'btn-warning' class for styling
+        } else {
+          buttonElement.textContent = 'Set Default';
+        }
+
+        Swal.fire('Success', 'Default address set successfully.', 'success')
+  .then(() => {
+    location.reload();
+  });
+
+      } else {
+        Swal.fire('Error', 'Failed to set default address.', 'error');
+      }
+    },
+    error: function (error) {
+      console.error(error);
+      Swal.fire('Error', 'Failed to set default address.', 'error');
+    }
+  });
+}
+
+
+
+</script>
+
+      <div style="font-family:'Times New Roman', Times, serif; color: rgb(52, 69, 86); ">
+        <hr>
+              <div class="row mb-3">
+                  <div class="col-sm-3">
+                      <h6 class="mb-0"><%= address.name %></h6>
+                  </div>
+                  <div class="col-sm-9 text-secondary">
+                     
+                  </div>
+              </div>
+              
+              <div class="row mb-3">
+                  <div class="col-sm-3">
+                      <h6 class="mb-0"><%= address.phoneNumber %></h6>
+                  </div>
+                  <div class="col-sm-9 text-secondary">
+                      
+                  </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-sm-3">
+                    <h6 class="mb-0"><%= address.email %></h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                    
+                </div>
+            </div>
+              
+              <div class="row mb-3">
+                  <div class="col-sm-3">
+                      <h6 class="mb-0"><%= address.address %></h6>
+                  </div>
+                  <div class="col-sm-9 text-secondary">
+                     
+                  </div>
+              </div>
+
+
+              <div class="row mb-3">
+                <div class="col-sm-3">
+                    <h6 class="mb-0"><%= address.country %></h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                   
+                </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-sm-3">
+                  <h6 class="mb-0"><%= address.state %></h6>
+              </div>
+              <div class="col-sm-9 text-secondary">
+                 
+              </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-sm-3">
+                <h6 class="mb-0"><%= address.postalZip %></h6>
+            </div>
+            
+
+            <div class="col-sm-9 text-secondary">
+               
+            </div>
+        </div>
+        
+            <hr>
+              <div style="display: flex; justify-content: space-between;" >
+                <button id="defaultButton" type="button" class="btn btn-sm <%= address.default ? 'btn-warning' : 'btn-outline-dark' %>"
+  onclick="setDefaultAddress('<%= address.id %>')">
+  <%= address.default ? 'Default' : 'Set Default' %>
+</button>
+
+
+                <button type="button" class="btn btn-outline-dark btn-sm edit-button" data-toggle="modal" data-target="#exampleModalCenter<%= address.id %>" data-id="<%= address.id %>">Edit</button>
+
+            </div>
+          </div>
+
+              
+          </div>
+          
+      </div> 
+      <br>
+      <% }); %> 
+      <% } else { %>
+        <p>No addresses found.</p>
+      <% } %>
+
+     
+  
+
+  
+        
+         
+
+              <div class="form-group">
+                <label for="c_ship_different_address" class="text-black" data-toggle="collapse" href="#ship_different_address" role="button" aria-expanded="false" aria-controls="ship_different_address"><input type="checkbox" value="1" id="c_ship_different_address"> Ship To A Different Address?</label>
+                <div class="collapse" id="ship_different_address">&nbsp; Add Address
+                  <div class="p-3 p-lg-5 border">
+                    <div class="form-group row">
+                      <div class="col-md-12">
+                        <label for="c_name" class="text-black">Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="c_name" name="c_name" required>
+                      </div>
+                    </div>
+                    <p id="name_error" style="color: red;"></p>
+                    
+                    
+                    <div class="form-group row">
+                      <div class="col-md-12">
+                        <label for="c_number" class="text-black">Phone<span class="text-danger">*</span> </label>
+                        <input type="number" class="form-control" id="c_number" name="c_number" required>
+                      </div>
+                    </div>
+                    <p id="number_error" style="color: red;"></p>
+                    
+                    <div class="form-group row">
+                      <div class="col-md-12">
+                        <label for="c_mail" class="text-black">Email Address </label>
+                        <input type="email" class="form-control" id="c_mail" name="c_mail">
+                      </div>
+                    </div>
+                    <p id="mail_error" style="color: red;"></p>
+                    
+                    <div class="form-group row">
+                      <div class="col-md-12">
+                        <label for="c_Miniaddress1" class="text-black">Address <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="c_Miniaddress1" name="c_Miniaddress1" placeholder="Street address" required>
+                      </div>
+                    </div>
+                    
+                    <div class="form-group">
+                      <input type="text" class="form-control" placeholder="Apartment, suite, unit etc. (optional)" id="c_Miniaddress2">
+                    </div>
+                    
+                    <div class="form-group row">
+                      <div class="col-md-12">
+                        <label for="c_country" class="text-black">Country <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="c_country" name="c_country" required>
+                      </div>
+                    </div>
+        
+        
+        
+                    <div class="form-group">
+                      <label for="c_state" class="text-black">State<span class="text-danger">*</span></label>
+                      <select id="c_state" class="form-control" required>
+                        
+                        <option value="1">Select a country</option>
+                        
+                          
+                        <option value="Andhra Pradesh">Andhra Pradesh</option>    
+                        <option value="Arunachal Pradesh">Arunachal Pradesh</option>    
+                        <option value="Assam">Assam</option>    
+                        <option value="Bihar">Bihar</option>    
+                        <option value="Chhattisgarh">Chhattisgarh</option>    
+                        <option value="Goa">Goa</option>    
+                        <option value="Gujarat">Gujarat</option>
+                        <option value="Haryana">Haryana</option>
+                        <option value="Himachal Pradesh">Himachal Pradesh</option>
+                        <option value="Jharkhand">Jharkhand</option>
+                        <option value="Karnataka">Karnataka</option>
+                        <option value="Kerala">Kerala</option>    
+                        <option value="Madhya Pradesh">Madhya Pradesh</option>
+                        <option value="Maharashtra">Maharashtra</option>
+                        <option value="Manipur">Manipur</option>
+                        <option value="Meghalaya">Meghalaya</option>
+                        <option value="Mizoram">Mizoram</option>
+                        <option value="Nagaland">Nagaland</option>
+                        <option value="Odisha">Odisha</option>
+                        <option value="Punjab">Punjab</option>
+                        <option value="Rajasthan">Rajasthan</option>
+                        <option value="Sikkim">Sikkim</option>
+                        <option value="Tamil Nadu">Tamil Nadu</option>
+                        <option value="Telangana">Telangana</option>
+                        <option value="Tripura">Tripura</option>
+                        <option value="Uttar Pradesh">Uttar Pradesh</option>
+                        <option value="Uttarakhand">Uttarakhand</option>
+                        <option value="West Bengal">West Bengal</option>
+        
+                        <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+                        <option value="Chandigarh">Chandigarh</option>
+                        <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and Daman and Diu</option>
+                        <option value="Lakshadweep">Lakshadweep</option>
+                        <option value="Delhi (National Capital Territory of Delhi)">Delhi (National Capital Territory of Delhi)</option>
+                        <option value="Puducherry">Puducherry</option>
+                      </select>
+                    </div>
+      
+                    <div class="form-group row">
+                      <div class="col-md-12">
+                        <label for="c_postal_zip" class="text-black">Postal / Zip <span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" id="c_postal_zip" name="c_postal_zip" required>
+                        
+                      </div>
+                    </div>
+                    <p id="zip_error" style="color: red;"></p>
+                    
+                    <div class="form-group">
+                      <button type="submit" class="btn btn-outline-dark" onclick="addAddress()">Add Address</button>
+                    </div>
+                  </div>
+        
+                </div>
+              </div>
+              
+    
+  <script>
+    
+    
+    document.addEventListener('DOMContentLoaded', function () {
+    
+    const nameInputElement = document.getElementById('c_name');
+        const errorNameElement = document.getElementById('name_error');
+    
+        nameInputElement.addEventListener('input', function(){
+            const nameValue = nameInputElement.value.trim();
+    
+            if (!/^[a-zA-Z\s]+$/.test(nameValue))  {
+                nameInputElement.setCustomValidity('Please enter a valid name with only letters');
+                errorNameElement.textContent = 'Please enter a valid name with only letters';
+            } else if (nameValue.length < 4) {
+                nameInputElement.setCustomValidity('Please enter a name with more than 3 letters');
+                errorNameElement.textContent = 'Please enter a name with more than 3 letters';
+            } else {
+                nameInputElement.setCustomValidity('');
+                errorNameElement.textContent = '';
+            }
+                
+        });
+    
+    });
+    
+    
+    
+                document.addEventListener('DOMContentLoaded', function () {
+        const numberInputElement = document.getElementById('c_number');
+        const errorMsgElement = document.getElementById('number_error');
+        
+        numberInputElement.addEventListener('input', function () {
+            const numberValue = numberInputElement.value.trim();
+    
+            if (numberValue.length !== 10) {
+                numberInputElement.setCustomValidity('Mobile number must be exactly 10 digits.');
+                errorMsgElement.textContent = 'Mobile number must be exactly 10 digits.';
+            } else {
+                numberInputElement.setCustomValidity('');
+                errorMsgElement.textContent = '';
+            }
+        });
+    });
+    
+    
+    document.addEventListener('DOMContentLoaded', function () {
+    
+    const emailInputElement = document.getElementById('c_mail');
+    const errorMailElement = document.getElementById('mail_error');
+    
+    emailInputElement.addEventListener('input', function(){
+        const emailValue = emailInputElement.value.trim();
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    
+        if (!emailRegex.test(emailValue)) {
+            emailInputElement.setCustomValidity('Please enter a valid email address');
+            errorMailElement.textContent = 'Please enter a valid email address';
+        } else {
+            emailInputElement.setCustomValidity('');
+            errorMailElement.textContent = '';
+        }
+    
+            
+    });
+    
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+        const zipInputElement = document.getElementById('c_postal_zip');
+        const errorZipElement = document.getElementById('zip_error');
+        
+        zipInputElement.addEventListener('input', function () {
+            const numberValue = zipInputElement.value.trim();
+    
+            if (numberValue.length !== 6) {
+              zipInputElement.setCustomValidity('Pincode must be exactly 6 digits.');
+              errorZipElement.textContent = 'Pincode must be exactly 6 digits..';
+            } else {
+              zipInputElement.setCustomValidity('');
+                errorZipElement.textContent = '';
+            }
+        });
+    });
+    
+    
+                
+              </script>
+
+            
+<script>
+             
+      
+      
+              function addAddress() {
+                
+                const cName = $("#c_name").val();
+                const cPhoneNumber = $("#c_number").val();
+                const cEmail = $("#c_mail").val();
+                const cMiniAddress1 = $("#c_Miniaddress1").val();
+                const cMiniAddress2 = $("#c_Miniaddress2").val();
+                const cCountry = $("#c_country").val();
+                const cState = $("#c_state").val();
+                const cPostalZip = $("#c_postal_zip").val();
+      
+                console.log(cCountry,cState,cPostalZip);
+                console.log("jjjjjjjjjjjj");
+            
+                const addressData = {
+                  name: cName,
+                  phoneNumber: cPhoneNumber,
+                  email: cEmail,
+                  address: cMiniAddress1 +' '+ cMiniAddress2,
+                  country: cCountry,
+                  state: cState,
+                  postalZip: cPostalZip,
+                };
+            
+                $.ajax({
+                  type: "POST",
+                  url: "/add-address",
+                  contentType: "application/json",
+                  data: JSON.stringify(addressData),
+                  success: function (data,event) {
+                   
+                    Swal.fire({
+                      icon: 'success',
+                      title: 'Address Added!',
+                      text: 'Your address has been successfully added.',
+                    }).then(() => {
+                      // You can perform additional actions after the user clicks 'OK'
+                      console.log('Address added successfully:', data);
+                      // alert('Address added successfully');
+                      
+                      location.reload();
+      
+                    });
+                  },
+                  error: function (error) {
+                    Swal.fire({
+                      icon: 'error',
+                      title: 'Error',
+                      text: 'Failed to add address. Please try again.',
+                    });
+                    console.error('Failed to add address:', error);
+                  },
+                });
+              }
+            </script>      
+            
+           
+          </div>
+
+      </div>
+
+      
+    </div>
+
+
+
+    <% if (userAddress && userAddress.length > 0) { %>
+      <% userAddress.forEach((address) => { %>
+        <div class="modal fade custom-modal-class" id="exampleModalCenter<%= address.id %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <form>
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLongTitle">Edit Address</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="p-3 p-lg-5 border">
+                    <div>
+                      <div class="col-md-12">
+                        <label for="name" class="text-black">Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="name<%= address.id %>" name="name" value="<%= address.name %>">
+                      </div>
+                    </div>
+                    <div>
+                      <div class="col-md-12">
+                        <label for="number" class="text-black">Phone</label>
+                        <input type="text" class="form-control" id="number<%= address.id %>" name="number" value="<%= address.phoneNumber %>">
+                      </div>
+                    </div>
+                    <!-- Add similar input fields for other address properties -->
+                    <div>
+                      <div class="col-md-12">
+                        <label for="email" class="text-black">Email Address</label>
+                        <input type="text" class="form-control" id="email<%= address.id %>" name="email" value="<%= address.email %>">
+                      </div>
+                    </div>
+                    <div>
+                      <div class="col-md-12">
+                        <label for="address" class="text-black">Address <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="address<%= address.id %>" name="address" placeholder="Street address" value="<%= address.address %>">
+                      </div>
+                    </div>
+                    <div>
+                      <div class="col-md-12">
+                        <label for="country" class="text-black">Country <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="country<%= address.id %>" name="country" value="<%= address.country %>">
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <label for="state" class="text-black">State <span class="text-danger">*</span></label>
+                      <select id="state<%= address.id %>" class="form-control" name="state">
+                        <option value="<%= address.state %>">Select a State</option>
+                        <option value="Andhra Pradesh">Andhra Pradesh</option>    
+                        <option value="Arunachal Pradesh">Arunachal Pradesh</option>    
+                        <option value="Assam">Assam</option>    
+                        <option value="Bihar">Bihar</option>    
+                        <option value="Chhattisgarh">Chhattisgarh</option>    
+                        <option value="Goa">Goa</option>    
+                        <option value="Gujarat">Gujarat</option>
+                        <option value="Haryana">Haryana</option>
+                        <option value="Himachal Pradesh">Himachal Pradesh</option>
+                        <option value="Jharkhand">Jharkhand</option>
+                        <option value="Karnataka">Karnataka</option>
+                        <option value="Kerala">Kerala</option>    
+                        <option value="Madhya Pradesh">Madhya Pradesh</option>
+                        <option value="Maharashtra">Maharashtra</option>
+                        <option value="Manipur">Manipur</option>
+                        <option value="Meghalaya">Meghalaya</option>
+                        <option value="Mizoram">Mizoram</option>
+                        <option value="Nagaland">Nagaland</option>
+                        <option value="Odisha">Odisha</option>
+                        <option value="Punjab">Punjab</option>
+                        <option value="Rajasthan">Rajasthan</option>
+                        <option value="Sikkim">Sikkim</option>
+                        <option value="Tamil Nadu">Tamil Nadu</option>
+                        <option value="Telangana">Telangana</option>
+                        <option value="Tripura">Tripura</option>
+                        <option value="Uttar Pradesh">Uttar Pradesh</option>
+                        <option value="Uttarakhand">Uttarakhand</option>
+                        <option value="West Bengal">West Bengal</option>
+        
+                        <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+                        <option value="Chandigarh">Chandigarh</option>
+                        <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and Daman and Diu</option>
+                        <option value="Lakshadweep">Lakshadweep</option>
+                        <option value="Delhi (National Capital Territory of Delhi)">Delhi (National Capital Territory of Delhi)</option>
+                        <option value="Puducherry">Puducherry</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-12">
+                        <label for="postal_zip" class="text-black">Postal / Zip <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="postal_zip<%= address.id %>" name="postal_zip" value="<%= address.postalZip %>">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-dark" data-dismiss="modal" data-id="<%= address.id %>" onclick="editAddress(this)">Update</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      <% }); %>
+    <% } else { %>
+      <!-- <p>No addresses found.</p> -->
+    <% } %>
+    
+    <script>
+      function editAddress(button) {
+        const id = $(button).data('id');
+        const cName = $("#name" + id).val();
+        const cNumber = $("#number" + id).val();
+        const cEmail = $("#email" + id).val();
+        const cMiniAddress = $("#address" + id).val();
+        const cCountry = $("#country" + id).val();
+        const cState = $("#state" + id).val();
+        const cPostalZip = $("#postal_zip" + id).val();
+    
+        const addressData = {
+          id: id,
+          name: cName,
+          phoneNumber: cNumber,
+          email: cEmail,
+          address: cMiniAddress,
+          country: cCountry,
+          state: cState,
+          postalZip: cPostalZip,
+        };
+    
+        $.ajax({
+          type: "PATCH",
+          url: "/edit-address",
+          contentType: "application/json",
+          data: JSON.stringify(addressData),
+          success: function (data) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Address Updated!',
+              text: 'Your address has been successfully updated.'
+            }).then(() => {
+              location.reload();
+            });
+          },
+          error: function (error) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Failed to edit address. Please try again.'
+            });
+            console.error('Failed to edit address:', error);
+          }
+        });
+      }
+    </script>
+    
+
+
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+    <script src="https://pingendo.com/assets/bootstrap/bootstrap-4.0.0-alpha.6.min.js"></script>
+  </body>
+
+
+
+
+<%-include('../layout/userLayout/userFooter.ejs') %>

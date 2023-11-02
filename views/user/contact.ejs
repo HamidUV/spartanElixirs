@@ -1,0 +1,104 @@
+<%- include('../layout/userLayout/userHeader.ejs') %>
+
+
+<div class="bg-light py-3">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 mb-0"><a href="index.html">Home</a> <span class="mx-2 mb-0">/</span> <strong class="text-black">Contact</strong></div>
+      </div>
+    </div>
+  </div>  
+
+  <br>
+  <br>
+
+  
+
+  <%
+    if (typeof message !== 'undefined') {
+%>
+    <p style="color: rgb(4, 161, 67); font-weight: 800; display: flex; justify-content: center; background-color: #fafdf5; padding: 10px; border-radius: 5px;">
+        <%= message %>
+    </p>
+<%
+    }
+%>
+
+  <div class="site-section" >
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 col-md-6">
+          <h2 class="h3 mb-3 text-black" >Get In Touch</h2>
+        </div>
+        <div class="col-md-7">
+
+              
+         
+          <form action="/sentContactMail" method="post">
+            <div class="p-3 p-lg-5 border">
+              <div class="form-group row">
+                <div class="col-md-12">
+                  <label for="name" class="text-black" >Full Name <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="col-md-12">
+                  <label for="email" class="text-black"  >Email <span class="text-danger">*</span></label required>
+                  <input type="email" class="form-control" id="email" name="email" placeholder="" required>
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="col-md-12">
+                  <label for="subject" class="text-black" >Subject </label>
+                  <input type="text" class="form-control" id="subject" name="subject" required>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <div class="col-md-12">
+                  <label for="message" class="text-black" >Message </label>
+                  <textarea name="message" id="message" cols="30" rows="7" class="form-control" required></textarea>
+                </div>
+              </div>
+              
+              <div class="form-group row">
+                <div class="col-lg-12">
+                  <button type="submit" class="btn btn-primary btn-lg btn-block"> Send Message </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="col-md-5 ml-auto">
+
+          <p>The contact page provides users with a convenient way to get in touch with Spartan Elixirs, either by filling out the contact form or by using the provided contact details. It ensures that visitors can easily reach out for inquiries, feedback, or assistance.
+
+            </p>
+            
+            <p>As you reach out to us, consider taking a journey through our perfumes. Uncover the scent that resonates with your soul and becomes your signature.
+
+              In summary, Spartan Elixirs' contact page is not just about communication; it's an invitation to explore a world of exquisite perfumes. It bridges the gap between customers and the fragrant treasures that await them, making the shopping experience truly memorable.</p>
+
+              <p>
+                Our company's headquarters are in Grasse, France, a city on the French Riviera renowned as the global perfume capital. It's where the finest cosmetics' fragrance formulations are crafted. Grasse's unique atmosphere captivates every visitor, making it a must-see destination
+              </p>
+              <br>
+              
+              <h5>Our Head office</h5>
+
+              <div class="p-4 border mb-3">
+                <span class="d-block text-primary h6 text-uppercase">France</span>
+                <p class="mb-0">Grasse
+                  Highway A8, exit 42 Mougins/Cannes, route N85, N2085</p>
+              </div> 
+
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+
+
+  <%- include('../layout/userLayout/userFooter.ejs') %>

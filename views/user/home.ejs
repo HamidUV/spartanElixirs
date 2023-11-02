@@ -1,0 +1,208 @@
+<% if(!userId) { %> <%- include('../layout/userLayout/userHeaderMini.ejs') %> <%
+} else { %> <%- include('../layout/userLayout/userHeader.ejs') %> <% } %>
+
+<style>
+  .site-blocks-cover {
+    width: 100%;
+    height: auto;
+  }
+</style>
+
+<% bannerData.forEach((banner) => { %>
+<div
+  class="site-blocks-cover"
+  style="background-image: url('/images/<%=banner.image %>')"
+  data-aos="fade"
+>
+  <div class="container">
+    <div class="row align-items-start align-items-md-center">
+      <div class="col-md-5 text-center text-md-left pt-5 pt-md-0">
+        <h1 class="mb-2">Explore the Scent Spectrum</h1>
+        <div class="intro-text text-center text-md-left">
+          <p class="mb-4">
+            Welcome to Spartan Elixirs, where fragrance is a work of art.
+            Discover your signature scent and elevate every moment. Explore our
+            collection today
+          </p>
+          <p>
+            <% if (userId) { %>
+            <a href="/shop" class="btn btn-sm btn-primary">Shop Now</a>
+            <% } else { %>
+            <a href="/login" class="btn btn-sm btn-primary">Shop Now</a>
+            <% } %>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% }); %>
+<div class="site-section site-section-sm site-blocks-1">
+  <div class="container">
+    <div class="row">
+      <div
+        class="col-md-6 col-lg-4 d-lg-flex mb-4 mb-lg-0 pl-4"
+        data-aos="fade-up"
+        data-aos-delay=""
+      >
+        <div class="icon mr-4 align-self-start">
+          <span class="icon-truck"></span>
+        </div>
+        <div class="text">
+          <h2 class="text-uppercase">Free Shipping</h2>
+          <p>
+            Shop now and enjoy free shipping on every order at Spartan Elixirs.
+            No minimum purchase required. Elevate your scent game today!
+          </p>
+        </div>
+      </div>
+      <div
+        class="col-md-6 col-lg-4 d-lg-flex mb-4 mb-lg-0 pl-4"
+        data-aos="fade-up"
+        data-aos-delay="100"
+      >
+        <div class="icon mr-4 align-self-start">
+          <span class="icon-refresh2"></span>
+        </div>
+        <div class="text">
+          <h2 class="text-uppercase">Free Returns</h2>
+          <p>
+            Shop confidently at Spartan Elixirs with our easy, 30-day free
+            returns. Discover your signature scent today.
+          </p>
+        </div>
+      </div>
+      <div
+        class="col-md-6 col-lg-4 d-lg-flex mb-4 mb-lg-0 pl-4"
+        data-aos="fade-up"
+        data-aos-delay="200"
+      >
+        <div class="icon mr-4 align-self-start">
+          <span class="icon-help"></span>
+        </div>
+        <div class="text">
+          <h2 class="text-uppercase">Customer Support</h2>
+          <p>
+            Our customer support team at Spartan Elixirs is here for you. Have a
+            question or need assistance? Contact us anytime; we're ready to
+            help!
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="site-section site-blocks-2">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-7 site-section-heading text-center pt-4">
+        <h2>Categories</h2>
+      </div>
+    </div>
+    <div class="row">
+      <% categoryData.forEach((category) => { %>
+
+      <div
+        class="col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0"
+        data-aos="fade"
+        data-aos-delay=""
+      >
+        <a class="block-2-item" href="/category/<%= category.name %>">
+          <figure class="image">
+            <img
+              class="category-image"
+              src="/images/<%=category.image %> "
+              class="img-fluid"
+            />
+         
+          </figure>
+          <div class="text">
+            <span class="text-uppercase">Collections</span>
+            <h3><%= category.name %></h3>
+          </div>
+        </a>
+      </div>
+      <%}); %>
+    </div>
+  </div>
+</div>
+
+<div class="site-section block-3 site-blocks-2 bg-light">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-7 site-section-heading text-center pt-4">
+        <h2>New Arrivals</h2>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="nonloop-block-3 owl-carousel">
+          <% const newArrivals = productData.slice(-4); %> <%
+          newArrivals.forEach((product) => { %>
+          <div class="item">
+            <div class="block-4 text-center">
+              <figure class="block-4-image">
+                <img
+                  class="product-image"
+                  src="/images/<%=product.image %>"
+                  alt="<%= product.name %>"
+                />
+               
+              </figure>
+              <div class="block-4-text p-4">
+                <h3><a href="#"><%=product.name %></a></h3>
+                <p class="mb-0"><%=product.category %></p>
+                <p class="text-primary font-weight-bold">
+                  <%=product.category %>
+                </p>
+              </div>
+            </div>
+          </div>
+          <% }); %>
+         
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="site-section block-8">
+  <div class="container">
+    <div class="row justify-content-center mb-5">
+      <div class="col-md-7 site-section-heading text-center pt-4">
+        <h2>
+          Spartan Elixirs: Crafting Nature's Beauty into Captivating Scents
+        </h2>
+      </div>
+    </div>
+    <div class="row align-items-center">
+      <div class="col-md-12 col-lg-7 mb-5">
+        <a href="#"
+          ><img
+            src="/images/landing page perfume 1.jpg"
+            alt="Image placeholder"
+            class="img-fluid rounded"
+        /></a>
+      </div>
+      <div class="col-md-12 col-lg-5 text-center pl-md-5">
+        <p>
+          Elevate your senses with Spartan Elixirs, where we transform nature's
+          beauty into captivating fragrances. Immerse yourself in the essence of
+          the natural world, bottled for your pleasure. Discover our artisanal
+          perfumes and embark on a scented journey like no other
+        </p>
+        <p><a href="#" class="btn btn-primary btn-sm">Shop Now</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .category-image {
+    width: 22rem;
+    height: 33rem;
+  }
+</style>
+<%- include('../layout/userLayout/userFooter.ejs') %>

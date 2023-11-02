@@ -1,0 +1,907 @@
+<%- include('../layout/userLayout/userHeader.ejs') %>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<div class="bg-light py-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 mb-0"><a href="/">Home</a> <span class="mx-2 mb-0">/</span> <a href="/cart">Cart</a> <span class="mx-2 mb-0">/</span> <strong class="text-black">Checkout</strong></div>
+        </div>
+    </div>
+</div>
+
+<div class="site-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mb-5 mb-md-0">
+                <h2 class="h3 mb-3 text-black">Billing Details</h2>
+                <form action="/place-order" id="Checkout-form" method="post">
+
+          <!-- ------------------------------ -->
+
+
+          <% if (userAddress && userAddress.length > 0) { %>
+            <% userAddress.filter(address => address.default).forEach((address) => { %>
+            
+        <div class="card" style="font-family: sans-serif; color: black  ;">
+          <div class="card-body">
+            <div class="form-check">
+             
+            <div style="display: flex; justify-content: end;" >
+              <input class="form-check-input" type="radio" name="selectedAddress" id="choose" onclick="selectAddress('choose')">
+              
+          </div>
+          
+              <label class="form-check-label" >
+               
+              
+            
+                 <br>
+                <div class="row mb-3">
+                    <div class="col-sm-9">
+                        <h6 class="mb-0"><%= address.name %></h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                       
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-sm-9">
+                        <h6 class="mb-0"><%= address.phoneNumber %></h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                        
+                    </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-sm-12">
+                      <h6 class="mb-0"><%= address.email %></h6>
+                  </div>
+                  <div class="col-sm-9 text-secondary">
+                      
+                  </div>
+              </div>
+                
+                <div class="row mb-3">
+                    <div class="col-sm-9">
+                        <h6 class="mb-0"><%= address.address %></h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                       
+                    </div>
+                </div>
+  
+  
+                <div class="row mb-3">
+                  <div class="col-sm-9">
+                      <h6 class="mb-0"><%= address.country %></h6>
+                  </div>
+                  <div class="col-sm-9 text-secondary">
+                     
+                  </div>
+              </div>
+  
+              <div class="row mb-3">
+                <div class="col-sm-9">
+                    <h6 class="mb-0"><%= address.state %></h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                   
+                </div>
+            </div>
+  
+            <div class="row mb-3">
+              <div class="col-sm-9">
+                  <h6 class="mb-0"><%= address.postalZip %></h6>
+              </div>
+              
+  
+          </div>
+          
+              
+               
+              </label>
+            </div>
+                
+            </div>
+        </div> 
+        <% }); %> 
+        <% } else { %>
+          <p>No addresses found.</p>
+        <% } %>
+
+
+        <script>
+          function selectAddress(addressId) {
+            console.log(addressId,"what");
+              // Assuming you have a function to fetch the address element by its ID
+              const addressElement = document.getElementById(addressId);
+              console.log("start");
+      
+              // Do something with the selected address element, for example, apply some styles
+              if (addressElement) {
+                 console.log(addressElement,"address");
+
+                 
+
+              }
+      
+              // Perform any other actions you need when an address is selected
+          }
+      </script>
+      
+  
+          <br>
+         
+          <a class="btn btn-outline-dark" onclick="storeCurrentRouteAndNavigate('/user-address')">Choose a New Address</a>
+
+          
+          <br>
+          <!-- ---------------------- -->
+          <br>
+          <div class="form-group">
+            <label for="c_ship_different_address" class="text-black" data-toggle="collapse" href="#ship_different_address" role="button" aria-expanded="false" aria-controls="ship_different_address"><input type="checkbox" value="1" id="c_ship_different_address"> Ship To A Different Address?</label>
+            <div class="collapse" id="ship_different_address">
+              <div class="p-3 p-lg-5 border">
+        
+                <div class="form-group row">
+                  <div class="col-md-12">
+                    <label for="c_name" class="text-black">Name <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="c_name" name="c_name" >
+                    
+                    <!-- <small id="name_error" class="text-danger"></small> -->
+                  </div>
+                </div>
+                <p id="name_error" style="color: red;"></p>
+                
+                
+                <div class="form-group row">
+                  <div class="col-md-12">
+                    <label for="c_number" class="text-black">Phone<span class="text-danger">*</span> </label>
+                    <input type="number" class="form-control" id="c_number" name="c_number" >
+                    <!-- <small id="number_error" class="text-danger"></small> -->
+                  </div>
+                </div>
+                <p id="number_error" style="color: red;"></p>
+                
+                <div class="form-group row">
+                  <div class="col-md-12">
+                    <label for="c_mail" class="text-black">Email Address </label>
+                    <input type="email" class="form-control" id="c_mail" name="c_mail">
+                  </div>
+                </div>
+                <p id="mail_error" style="color: red;"></p>
+                
+                <div class="form-group row">
+                  <div class="col-md-12">
+                    <label for="c_Miniaddress1" class="text-black">Address <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="c_Miniaddress1" name="c_Miniaddress1" placeholder="Street address" >
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <input type="text" class="form-control" placeholder="Apartment, suite, unit etc. (optional)" id="c_Miniaddress2">
+                  <!-- <input type="text" name="" id=" " hidden> -->
+                </div>
+                
+                <div class="form-group row">
+                  <div class="col-md-12">
+                    <label for="c_country" class="text-black">Country <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="c_country" name="c_country" >
+                  </div>
+                </div>
+    
+    
+    
+                <div class="form-group">
+                  <label for="c_state" class="text-black">State<span class="text-danger">*</span></label>
+                  <select id="c_state" class="form-control" >
+                    
+                    <option value="1">Select a country</option>
+                    
+                      
+                    <option value="Andhra Pradesh">Andhra Pradesh</option>    
+                    <option value="Arunachal Pradesh">Arunachal Pradesh</option>    
+                    <option value="Assam">Assam</option>    
+                    <option value="Bihar">Bihar</option>    
+                    <option value="Chhattisgarh">Chhattisgarh</option>    
+                    <option value="Goa">Goa</option>    
+                    <option value="Gujarat">Gujarat</option>
+                    <option value="Haryana">Haryana</option>
+                    <option value="Himachal Pradesh">Himachal Pradesh</option>
+                    <option value="Jharkhand">Jharkhand</option>
+                    <option value="Karnataka">Karnataka</option>
+                    <option value="Kerala">Kerala</option>    
+                    <option value="Madhya Pradesh">Madhya Pradesh</option>
+                    <option value="Maharashtra">Maharashtra</option>
+                    <option value="Manipur">Manipur</option>
+                    <option value="Meghalaya">Meghalaya</option>
+                    <option value="Mizoram">Mizoram</option>
+                    <option value="Nagaland">Nagaland</option>
+                    <option value="Odisha">Odisha</option>
+                    <option value="Punjab">Punjab</option>
+                    <option value="Rajasthan">Rajasthan</option>
+                    <option value="Sikkim">Sikkim</option>
+                    <option value="Tamil Nadu">Tamil Nadu</option>
+                    <option value="Telangana">Telangana</option>
+                    <option value="Tripura">Tripura</option>
+                    <option value="Uttar Pradesh">Uttar Pradesh</option>
+                    <option value="Uttarakhand">Uttarakhand</option>
+                    <option value="West Bengal">West Bengal</option>
+    
+                    <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+                    <option value="Chandigarh">Chandigarh</option>
+                    <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and Daman and Diu</option>
+                    <option value="Lakshadweep">Lakshadweep</option>
+                    <option value="Delhi (National Capital Territory of Delhi)">Delhi (National Capital Territory of Delhi)</option>
+                    <option value="Puducherry">Puducherry</option>
+                    
+                  
+                    
+                  </select>
+                </div>
+    
+                <div class="form-group row">
+                  <div class="col-md-12">
+                    <label for="c_postal_zip" class="text-black">Postal / Zip <span class="text-danger">*</span></label>
+                    <input type="number" class="form-control" id="c_postal_zip" name="c_postal_zip">
+                    
+                  </div>
+                </div>
+                <p id="zip_error" style="color: red;"></p>
+                
+                <div class="form-group">
+                  <button type="submit" class="btn btn-outline-dark" onclick="addAddress()">Add Address</button>
+                </div>
+              </div>
+    
+            </div>
+          </div>
+          
+
+          <script>
+
+function storeCurrentRouteAndNavigate(targetRoute) {
+  // Get the current route and store it in local storage
+  const currentRoute = window.location.pathname;
+  localStorage.setItem('previousRoute', currentRoute);
+
+  // Navigate to the target route
+  window.location.href = targetRoute;
+}
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+
+const nameInputElement = document.getElementById('c_name');
+    const errorNameElement = document.getElementById('name_error');
+
+    nameInputElement.addEventListener('input', function(){
+        const nameValue = nameInputElement.value.trim();
+
+        if (!/^[a-zA-Z\s]+$/.test(nameValue))  {
+            nameInputElement.setCustomValidity('Please enter a valid name with only letters');
+            errorNameElement.textContent = 'Please enter a valid name with only letters';
+        } else if (nameValue.length < 4) {
+            nameInputElement.setCustomValidity('Please enter a name with more than 3 letters');
+            errorNameElement.textContent = 'Please enter a name with more than 3 letters';
+        } else {
+            nameInputElement.setCustomValidity('');
+            errorNameElement.textContent = '';
+        }
+            
+    });
+
+});
+
+
+
+            document.addEventListener('DOMContentLoaded', function () {
+    const numberInputElement = document.getElementById('c_number');
+    const errorMsgElement = document.getElementById('number_error');
+    
+    numberInputElement.addEventListener('input', function () {
+        const numberValue = numberInputElement.value.trim();
+
+        if (numberValue.length !== 10) {
+            numberInputElement.setCustomValidity('Mobile number must be exactly 10 digits.');
+            errorMsgElement.textContent = 'Mobile number must be exactly 10 digits.';
+        } else {
+            numberInputElement.setCustomValidity('');
+            errorMsgElement.textContent = '';
+        }
+    });
+});
+
+
+document.addEventListener('DOMContentLoaded', function () {
+
+const emailInputElement = document.getElementById('c_mail');
+const errorMailElement = document.getElementById('mail_error');
+
+emailInputElement.addEventListener('input', function(){
+    const emailValue = emailInputElement.value.trim();
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    if (!emailRegex.test(emailValue)) {
+        emailInputElement.setCustomValidity('Please enter a valid email address');
+        errorMailElement.textContent = 'Please enter a valid email address';
+    } else {
+        emailInputElement.setCustomValidity('');
+        errorMailElement.textContent = '';
+    }
+
+        
+});
+
+});
+document.addEventListener('DOMContentLoaded', function () {
+    const zipInputElement = document.getElementById('c_postal_zip');
+    const errorZipElement = document.getElementById('zip_error');
+    
+    zipInputElement.addEventListener('input', function () {
+        const numberValue = zipInputElement.value.trim();
+
+        if (numberValue.length !== 6) {
+          zipInputElement.setCustomValidity('Pincode must be exactly 6 digits.');
+          errorZipElement.textContent = 'Pincode must be exactly 6 digits..';
+        } else {
+          zipInputElement.setCustomValidity('');
+            errorZipElement.textContent = '';
+        }
+    });
+});
+
+
+            
+          </script>
+          
+
+
+        </div>
+
+
+
+
+        
+        <div class="col-md-6">
+
+          <div class="row mb-5">
+            <div class="col-md-12">
+              <h2 class="h3 mb-3 text-black">Coupon Code</h2>
+              <div class="p-3 p-lg-5 border">
+                
+                <label for="c_code" class="text-black mb-3">Enter your coupon code if you have one</label>
+                <div class="input-group w-75">
+                  <input type="text" class="form-control" id="coupon" placeholder="Coupon Code" aria-label="Coupon Code" aria-describedby="button-addon2">
+                  <div class="input-group-append">
+                    
+                    <button class="btn btn-primary btn-sm" onclick="applyCoupon(); return false;">Apply</button>
+
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          
+          <div class="row mb-5">
+            <div class="col-md-12">
+              <h2 class="h3 mb-3 text-black">Your Order</h2>
+              <div class="p-3 p-lg-5 border">
+                
+                <table class="table site-block-order-table mb-5">
+                  <thead>
+                    <th>Product</th>
+                    <th>Total</th>
+                  </thead>
+                  
+                  <tbody>
+                    <% Cart.forEach((product) => { %>
+                    <tr>
+                      <td><%= product.productName %> &nbsp; x &nbsp;<%= product.quantity %></td>
+
+                      <td><%= product.price %></td>
+                      
+                    </tr>
+                    <% }); %>
+                    
+                    <tr>
+                      
+                      <td class="text-black font-weight-bold"><strong>Cart Subtotal</strong></td>
+                      <% let subtotal = 0; %>
+                      <% Cart.forEach((product) => { %>
+                        <% subtotal += product.quantity * product.price; %>
+                      <% }); %>
+                      <td class="text-black" id="subtotal">₹<%= subtotal.toFixed(2) %></td>
+                    </tr>
+                    <tr>
+                      
+                      <td class="text-black font-weight-bold"><strong>Coupon</strong></td>
+                      <td class="text-black" id="couponPrice">₹0.00</td>
+                    </tr>
+                    <tr>
+                      <td class="text-black font-weight-bold"><strong>Order Total</strong></td>
+                      
+                      
+                      <td class="text-black font-weight-bold" id="totalPrice"><strong>₹<%= subtotal.toFixed(2) %><span id="totalAmount"></span></strong></td>
+                    </tr>
+                    
+                  </tbody>
+                  
+                </table>
+
+
+
+
+                <div class="border p-3 mb-3">
+                  <h3 class="h6 mb-0">
+                    <label style="display: flex; justify-content: space-between">
+                      <h3 class="h6 mb-0">
+                        <a class="d-block" data-toggle="collapse" href="#collapsebank" role="button" aria-expanded="false" aria-controls="collapsebank">Cash On Delivery</a>
+                      </h3>
+                      <input type="radio" id="cashOnDeliveryRadio" name="paymentMethod" value="cashOnDelivery">
+                    </label>
+                  </h3>
+                  <div class="collapse" id="collapsebank">
+                    <div class="py-2">
+                      <p class="mb-0">Pay when your order arrives! Choose Cash on Delivery for a hassle-free payment experience</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="border p-3 mb-3">
+                  <label style="display: flex; justify-content: space-between">
+                    <h3 class="h6 mb-0">
+                      <a class="d-block" data-toggle="collapse" href="#collapsepaypal" role="button" aria-expanded="false" aria-controls="collapsepaypal">RazorPay</a>
+                    </h3>
+                    <input type="radio" id="razorPayRadio" name="paymentMethod" value="razorPay">
+                  </label>
+                  <div class="collapse" id="collapsepaypal">
+                    <div class="py-2">
+                      <p class="mb-0">Experience the ultimate in payment convenience with RazorPay. Secure your order now and relax, knowing your payment is in safe hands</p>
+                    </div>
+                  </div>
+                </div>
+
+                  <div class="border p-3 mb-5">
+                    <label style="display: flex; justify-content: space-between">
+                      <h3 class="h6 mb-0">
+                        <a class="d-block" data-toggle="collapse" href="#collapsewallet" role="button" aria-expanded="false" aria-controls="collapsewallet">Wallet</a>
+                      </h3>
+                      <input type="radio" id="walletRadio" name="paymentMethod" value="wallet">
+                    </label>
+                    <div class="collapse" id="collapsewallet">
+                      <div class="py-2">
+                        <p class="mb-0">Simplify payments with your wallet</p>
+                        <p style="font-weight: 600;"> Amount : <%= walletData.totalAmount %></p>
+                      </div>
+                    </div>
+                  
+                    
+                  </div>
+                  
+                  <div class="form-group">
+                    <button class="btn btn-primary btn-lg py-3 btn-block" id="placeOrderButton">Place Order</button>
+                  </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+      </form>
+      
+    </div>
+    
+  </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+
+function applyCoupon() {
+  // Assuming you have a text input for coupon code with id 'coupon'
+  const couponCode = document.getElementById('coupon').value;
+
+  // AJAX request to apply the coupon
+  $.ajax({
+    url: '/apply-coupon',
+    method: 'post',
+    data: { couponCode },
+    success: function (response) {
+      if (response.error) {
+        // Handle error messages from the server
+        alert(response.error);
+      } 
+      else if (response.discountAmount) {
+        // Extract coupon data from the response
+        const discountAmount = parseFloat(response.discountAmount);
+        const subtotal = parseFloat($('#subtotal').text().replace('₹', ''));
+        const minimumAmount = parseFloat(response.minimumAmount);
+
+        // Check if the subtotal is greater than or equal to the minimum amount
+        if (subtotal >= minimumAmount) {
+          let discountElement = document.getElementById('totalPrice');
+          if (discountElement) {
+            discountElement.innerHTML = '₹' + discountAmount.toFixed(2);
+          }
+
+          let totalPrice = subtotal - discountAmount;
+
+          // Update UI for total price
+          $('#totalPrice').text('₹' + totalPrice.toFixed(2));
+
+          // Update UI for coupon price
+          let couponPriceElement = document.getElementById('couponPrice');
+          if (couponPriceElement) {
+            couponPriceElement.innerHTML = '₹' + discountAmount.toFixed(2);
+          }
+        } else {
+          alert('Minimum amount required for the coupon ' + '₹' +response.minimumAmount );
+        }
+      } else {
+        console.log('No discount applied.');
+      }
+    },
+    error: function (error) {
+      // alert("Coupon Invalid");
+      alert(error.responseJSON.error);
+      console.error('Error applying coupon:', error.responseText);
+    }
+  });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+// function applyCoupon() {
+//     console.log('Button clicked!');
+//   // Assuming you have a text input for coupon code with id 'coupon'
+//   const couponCode = document.getElementById('coupon').value;
+
+//   // AJAX request to apply the coupon
+//   $.ajax({
+//     url: '/apply-coupon',
+//     method: 'post',
+//     data: { couponCode },
+//     success: function (response) {
+      
+//       if (response.discountAmount ) {
+//         // Update UI with the discount amount
+//         let discountAmount = parseFloat(response.discountAmount);
+//         let discountElement = document.getElementById('couponPrice');
+//         if (discountElement) {
+//           discountElement.innerHTML = '₹' + discountAmount.toFixed(2);
+//         }
+
+//         console.log(discountAmount,"discount");
+
+//         if(response.subtotal){
+//         let subtotal = parseFloat(response.subtotal);
+//         let totalPrice = subtotal - discountAmount ;
+//         console.log(subtotal,"subtotal ");
+//         console.log(totalPrice," : Total");
+//         let totalElement = document.getElementById('totalPrice');
+//         if(totalElement){
+//           totalElement.innerHTML = '₹' + totalPrice.toFixed(2);
+
+//         }
+
+
+        
+        
+//         console.log("total price :" , totalPrice);
+//       }
+
+       
+
+//         // let totalPrice = subtotal - discountAmount;
+//         // $('#totalPrice').text('₹' + totalPrice.toFixed(2));
+
+//         // Update UI for coupon price
+//         let couponPriceElement = document.getElementById('couponPrice');
+//         if (couponPriceElement) {
+//           couponPriceElement.innerHTML = '₹' + discountAmount.toFixed(2);
+//         }
+//       } else {
+//         // Handle case when no discount is applied
+//         console.log('No discount applied.');
+//       }
+
+
+      
+
+
+//     },
+//     error: function (error) {
+//       console.error('Error applying coupon:', error.responseText);
+//     }
+//   });
+
+ 
+  
+// }
+
+
+  
+</script>
+  
+
+
+<!-- For add address -->
+<script>
+  function addAddress() {
+    const cName = $("#c_name").val();
+    const cPhoneNumber = $("#c_number").val();
+    const cEmail = $("#c_mail").val();
+    const cMiniAddress1 = $("#c_Miniaddress1").val();
+    const cMiniAddress2 = $("#c_Miniaddress2").val();
+    const cCountry = $("#c_country").val();
+    const cState = $("#c_state").val();
+    const cPostalZip = $("#c_postal_zip").val();
+
+    console.log(cCountry,cState,cPostalZip);
+    console.log("jjjjjjjjjjjj");
+
+    const addressData = {
+      name: cName,
+      phoneNumber: cPhoneNumber,
+      email: cEmail,
+      address: cMiniAddress1 +' '+ cMiniAddress2,
+      country: cCountry,
+      state: cState,
+      postalZip: cPostalZip,
+    };
+
+    $.ajax({
+      type: "POST",
+      url: "/add-address",
+      contentType: "application/json",
+      data: JSON.stringify(addressData),
+      success: function (data) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Address Added!',
+          text: 'Your address has been successfully added.',
+        }).then(() => {
+          // You can perform additional actions after the user clicks 'OK'
+          console.log('Address added successfully:', data);
+          // alert('Address added successfully');
+          
+          location.reload();
+
+        });
+      },
+      error: function (error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to add address. Please try again.',
+        });
+        console.error('Failed to add address:', error);
+      },
+    });
+  }
+</script>   
+
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    $(document).ready(function () {
+
+      let paymentMethod = null;
+        // Handle form submission
+        $(document).on('click', '#cashOnDeliveryRadio', function () {
+    paymentMethod = 'cashOnDelivery'; // Set the payment method to 'cashOnDelivery'
+    alert('You selected Cash On Delivery payment ');
+    // You can add more logic for handling Cash On Delivery here
+});
+
+$(document).on('click', '#razorPayRadio', function () {
+    paymentMethod = 'razorPay'; // Set the payment method to 'razorPay'
+    alert('You selected RazorPay payment method');
+    // You can add more logic for handling RazorPay here
+});
+
+$(document).on('click', '#walletRadio', function () {
+    paymentMethod = 'wallet'; // Set the payment method to 'wallet'
+    alert('You selected Wallet');
+  });
+
+        console.log("Document ready!");
+
+        $("#Checkout-form").submit(function (e) {
+            e.preventDefault(); // Prevent the default form submission
+            if (paymentMethod === null) {
+        alert('Please select a payment method.'); // Show an alert if no payment method is selected
+        return; // Stop form submission
+            }
+
+            
+            const couponCode = document.getElementById('coupon').value;
+            const formData = $('#Checkout-form').serialize() + `&couponCode=${couponCode}`;
+
+            // const formData = $('#Checkout-form').serialize();
+            
+
+            console.log("Form submitted");
+
+            $.ajax({
+                url: '/place-order',
+                method: 'post',
+                data: formData,
+                success: function (response) {
+                  console.log(formData,"show this");
+                    if (response.success) {
+                        console.log("yes it is");
+                        if (paymentMethod === 'razorPay') {
+                           
+                            var options = {
+                                "key": response.key_id,
+                                "amount": response.amount,
+                                "currency": "INR",
+                                "name": response.product_name,
+                                "order_id": response.orderId,
+                                "handler": function (response) {
+  alert('Payment Success...');
+  verifyPayment(response);
+  window.location.href = '/thanks'; // Redirect after successful payment
+},
+                                "prefill": {
+                                    "name": response.name,
+                                    "email": response.email,
+                                    "contact": response.contact
+                                },
+                                "notes": {
+                                    "address": "Razorpay Corporate Office"
+                                },
+                                "theme": {
+                                    "color": "#3399cc"
+                                }
+                            };
+
+                            var razorPayObject = new Razorpay(options);
+                            razorPayObject.on('payment.failed', function (response) {
+                                alert("Payment Failed");
+                                // Perform actions for a failed payment, e.g., show an error message
+                            });
+
+                            razorPayObject.open();
+
+                            
+
+                            function verifyPayment(response) {
+                              console.log("yes it's");
+                              $.ajax({
+        url: '/verifyPayment',
+        method: 'post',
+        data: {
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_signature: response.razorpay_signature,
+            orderData: response.orderData // If needed
+        },
+        success: function (verifyResponse) {
+            // Handle the response from the server
+            if (verifyResponse.success) {
+                location.href = '/thanks';
+            } else {
+                alert('Payment verification failed.');
+            }
+        },
+        error: function (verifyError) {
+            console.error('Error verifying payment:', verifyError);
+        }
+    });
+}
+  
+
+
+
+
+
+
+
+                            $.ajax({
+                      url: '/removeCartData',
+                      method: 'delete',
+                      success: function (removeResponse) {
+                          console.log('Cart data removed:', removeResponse);
+                          // window.location.href = '/thanks';
+                      },
+                      error: function (removeError) {
+                          console.error('Error removing cart data:', removeError);
+                          window.location.href = '/404'; // Redirect even on error (adjust as needed)
+                      }
+                  });
+                        }else if(paymentMethod === 'cashOnDelivery'){
+                          alert("Order Placed Successfully");
+                          
+                          $.ajax({
+                      url: '/removeCartData',
+                      method: 'delete',
+                      success: function (removeResponse) {
+                          console.log('Cart data removed:', removeResponse);
+                          window.location.href = '/thanks';
+                      },
+                      error: function (removeError) {
+                          console.error('Error removing cart data:', removeError);
+                          window.location.href = '/404'; // Redirect even on error (adjust as needed)
+                      }
+                  });
+
+                        }
+                        else if (paymentMethod === 'wallet') {
+    const totalAmount = parseFloat($('#totalAmount').text()); 
+                          console.log("startttttt");
+    $.ajax({
+        url: '/walletPaymentVerify',
+        method: 'post',
+        
+        success: function (response) {
+          console.log(response,"jauaaa");
+            if (response.success) {
+                console.log("Product purchased with wallet amount");
+                alert("Order Placed Successfully");
+                $.ajax({
+                      url: '/removeCartData',
+                      method: 'delete',
+                      success: function (removeResponse) {
+                          console.log('Cart data removed:', removeResponse);
+                          window.location.href = '/thanks';
+                      },
+                      error: function (removeError) {
+                          console.error('Error removing cart data:', removeError);
+                          window.location.href = '/404'; // Redirect even on error (adjust as needed)
+                      }
+                  });
+               
+            } else {
+                alert('Product purchasing failed');
+                
+            }
+        },
+        error: function (error) {
+            console.error('Error making wallet payment:', error);
+            // Handle errors (e.g., show an error message)
+        }
+    });
+    
+
+
+}
+
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function (orderError) {
+                    console.error('Error placing order:', orderError);
+                }
+            });
+        });
+
+        // Other JavaScript functionality specific to your page
+    });
+</script>
+
+
+
+  
+
+
+
+
+
+<%-include('../layout/userLayout/userFooter.ejs') %>

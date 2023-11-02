@@ -1,0 +1,57 @@
+
+
+        <main id="site-main">
+            <div style=" margin-top: 30px; display: flex; justify-content: center;">
+                <h1 >SALES REPORT</h1>
+            </div>
+       
+
+            <div class="container">
+                
+    
+                    <table class="table" style="width: 100%;">
+                        <thead class="thead-dark" >
+                            <tr>
+                                <th>No</th>
+                                <th>User Id</th>
+                                <th>Product</th>
+                                <th>Order Date</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <br>
+                        <tbody>
+                            <% let counter = 1; %>
+                            <% orderDatas.forEach((orderData) => { %>
+                                <tr>
+                                    <td><%= counter %></td>
+                                    <td><%= orderData.userId %></td>
+                                    <td>
+                                        <% orderData.productDetails.forEach((productDetail) => { %>
+                                            <%= productDetail.productName %>
+
+                                            <br>
+                                        <% }); %>
+                                    </td>
+                                    <% const formattedDate = orderData.date.toDateString(); %>
+                                    <td><%= formattedDate  %></td>
+                                    <td>₹<%= orderData.subtotal %></td>
+                                    <td ><%= orderData.cartCount %></td>
+                                    <td>₹<%= orderData.totalAmount %></td>
+                                    <td><%= orderData.orderStatus %></td>
+                                </tr>
+                                <% counter++; %>
+                            <% }); %>
+                        </tbody>
+                    </table>
+              
+            </div>
+        </main>
+    </div>
+</div>
+
+
+

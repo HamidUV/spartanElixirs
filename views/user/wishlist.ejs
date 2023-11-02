@@ -1,0 +1,222 @@
+<%- include('../layout/userLayout/userHeader.ejs') %>
+<!-- Add this link in the head section of your HTML file -->
+<head>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous"
+  />
+</head>
+
+<br />
+<br />
+
+<div class="hero-wrap hero-bread">
+  <div class="container">
+    <div
+      class="row no-gutters slider-text align-items-center justify-content-center"
+    >
+      <div class="col-md-9 ftco-animate text-center">
+        <h2
+          class="mb-0 bread"
+          style="color: black; font-family: 'Times New Roman', Times, serif"
+        >
+          WISHLIST
+        </h2>
+      </div>
+      <br />
+    </div>
+  </div>
+</div>
+<br />
+<br />
+
+<section class="ftco-section ftco-cart">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 ftco-animate">
+        <div class="cart-list">
+          <table class="table">
+            <thead class="thead-primary" style="color: rgb(55, 42, 42)">
+              <tr class="text-center">
+                <th>Image</th>
+                <th>Product Name</th>
+                <th>Price</th>
+                <th>Action</th>
+                <th>&nbsp;</th>
+              </tr>
+            </thead>
+            <tbody style="color: rgb(55, 42, 42)">
+              <% wishlist.forEach((product) => { %>
+              <tr
+                class="text-center"
+                id="wishlistProduct_<%= product.productId %>"
+              >
+                <td class="product-thumbnail">
+                  <img
+                    src="/images/<%= product.productImage %>"
+                    alt="Image"
+                    class="img-fluid"
+                  />
+                </td>
+                <td class="product-name">
+                  <h5><%= product.productName %></h5>
+                </td>
+                <td class="price">
+                  <h5>₹<%= product.price %></h5>
+                </td>
+                <td>
+                  <a
+                    href="javascript:void(0)"
+                    onclick="removeProductFromWishlist('<%= product.productId %>')"
+                  >
+                    <span
+                      class="btn btn-danger"
+                      style="
+                        color: rgb(255, 255, 255);
+                        background-color: #ff0000;
+                      "
+                      >X</span
+                    >
+                  </a>
+                </td>
+                <td>
+                  <button
+                    onclick="addToCart('<%= product.productId %>')"
+                    class="btn btn-outline-dark"
+                  >
+                    Add to Cart
+                  </button>
+                </td>
+              </tr>
+              <!-- END TR-->
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .product-thumbnail {
+    width: 100px; /* Set your desired width */
+    height: auto; /* Set your desired height */
+    object-fit: cover; /* This property ensures that the image retains its aspect ratio */
+  }
+
+  .text-center {
+    text-align: center;
+  }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<script>
+  function addToCart(productId) {
+    // Add the product to the cart
+    $.ajax({
+      url: "/add-to-cart/" + productId,
+      method: "get",
+      success: function (res) {
+        if (res && res.error) {
+          alert(res.message);
+        } else {
+          // If adding to cart is successful, remove the product from the wishlist
+          removeProductWishlist(productId);
+          alert("Product added to cart successfully..!");
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error("AJAX Error:", xhr, status, error);
+
+        if (
+          xhr.responseJSON &&
+          xhr.responseJSON.error &&
+          xhr.responseJSON.message === "Product not in stock"
+        ) {
+          alert("This product is not in stock.");
+          window.location.href = "/shop";
+        } else {
+          alert("Please login and buy products.");
+          window.location.href = "/login";
+        }
+      },
+    });
+  }
+
+  function removeProductFromWishlist(productId) {
+    // Display SweetAlert confirmation dialog
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, remove it!",
+    }).then((result) => {
+      // If user clicks "Yes"
+      if (result.isConfirmed) {
+        // Remove the corresponding HTML element representing the product in the wishlist
+        const productElement = document.getElementById(
+          `wishlistProduct_${productId}`
+        );
+        if (productElement) {
+          productElement.remove(); // Remove the element from the DOM
+        }
+
+        // Make an AJAX request to remove the product from the wishlist
+        $.ajax({
+          url: "/remove-from-wishlist/" + productId,
+          method: "get",
+          success: function (res) {
+            console.log("Product removed from wishlist:", res);
+          },
+          error: function (xhr, status, error) {
+            console.error(
+              "Error removing product from wishlist:",
+              xhr,
+              status,
+              error
+            );
+            // Handle the error if the removal from the wishlist fails
+          },
+        });
+      }
+    });
+  }
+
+  function removeProductWishlist(productId) {
+    // Directly remove the corresponding HTML element representing the product in the wishlist
+    const productElement = document.getElementById(
+      `wishlistProduct_${productId}`
+    );
+    if (productElement) {
+      productElement.remove(); // Remove the element from the DOM
+    }
+
+    // Make an AJAX request to remove the product from the wishlist
+    $.ajax({
+      url: "/remove-from-wishlist/" + productId,
+      method: "get",
+      success: function (res) {
+        console.log("Product removed from wishlist:", res);
+      },
+      error: function (xhr, status, error) {
+        console.error(
+          "Error removing product from wishlist:",
+          xhr,
+          status,
+          error
+        );
+        // Handle the error if the removal from the wishlist fails
+      },
+    });
+  }
+</script>
+
+<%- include('../layout/userLayout/userFooter.ejs') %>

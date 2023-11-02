@@ -1,0 +1,63 @@
+<%- include('../layout/userLayout/userHeaderMini.ejs') %>
+
+
+  <div class="site-section">
+    <div class="container">
+
+      <div class="row mb-5">
+        <a href="/categories" class="border-shadow" style="margin-left: 15px;">
+          <span class="text-gradient"><i class="fa-solid fa-arrow-left">&nbsp;</i>Go back </span>
+        </a>
+        <div class="col-md-12 order-2">
+
+          <div class="row">
+            <div class="col-md-12 mb-5">
+              <div class="float-md-left mb-4"><h2 class="text-black h5">Celebrate Your Signature Scent</h2></div>
+              <div class="d-flex">
+              
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-5 ">
+            <% productData.forEach((product) => { %>
+            <div class="col-sm-6 col-lg-4 mb-4 " data-aos="fade-up">
+              <div class="block-4 text-center border">
+                <figure class="block-4-image">
+                  <a href="/single-item/<%= product.name %>">
+                    <img class="product-image" src="/images/<%=product.image %>" alt="<%= product.name %>">
+                </figure>
+
+                <div class="block-4-text p-4">
+                  
+                  <h3><a > <%=product.name %></a></h3>
+                  <p class="mb-0"><%=product.category %></p>
+                  <p class="text-primary font-weight-bold">₹<%=product.price %></p>
+                </div>
+              </div>
+            </div>
+            <% }); %>
+          </div>
+        </div>
+
+
+            <div class="mb-4">
+              <h3 class="mb-3 h6 text-uppercase text-black d-block"></h3>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      
+      
+    </div>
+  </div>
+
+  <style>
+    .product-image{
+      width: 16rem;
+      height: 20rem;
+    }
+  </style>
+  <%- include('../layout/userLayout/userFooter.ejs') %>

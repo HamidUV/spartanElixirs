@@ -1,0 +1,16 @@
+export const ADMIN_COLLECTION = "admin";
+export const USER_COLLECTION = "user";
+export const PRODUCT_COLLECTION = "product";
+export const CATEGORY_COLLECTION = "category";
+export const BANNER_COLLECTION = "banner";
+export const CART_COLLECTION = "cart";
+export const COUPON_COLLECTION = "coupon";
+export const ORDER_COLLECTION = "order";
+export const USED_COUPON = "usedCoupon";
+export const WALLET_COLLECTION = "wallet";
+export const sessionSecret = "Nhan parayumbo rathri nhan parayumbo pakal";
+export const emailUser = "hamid.codehub@gmail.com";
+export const emailPassword = process.env.EMAIL_PASSWORD;
+export const nodemailpassword = "jxapknckqisogfge";
+export const RAZORPAY_ID_KEY = "rzp_test_HPduueLbN2t3JW";
+export const RAZORPAY_SECRET_KEY = "WmeBvNLcOjGK606fN8ExX001";

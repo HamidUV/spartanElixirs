@@ -1,0 +1,232 @@
+<%- include('../layout/adminLayout/adminHeader.ejs') %>
+
+<div class="container py-5">
+  <div class="row text-center text-white mb-5">
+    <div class="col-lg-7 mx-auto" style="margin-top: 40px">
+      <h3
+        class="display-6"
+        style="
+          font-weight: 500;
+          color: rgb(50, 45, 45);
+          font-family: 'Times New Roman', Times, serif;
+        "
+      >
+        ORDER DETAILS
+      </h3>
+    </div>
+  </div>
+  <div>
+    <a href="/admin/userOrders" class="btn btn-secondary"> Go back</a>
+  </div>
+  <div class="row" style="margin-top: 10px">
+    <div class="col-lg-12 mx-auto">
+      <!-- List group-->
+      <ul class="list-group shadow">
+        <!-- list group item-->
+        <li class="list-group-item">
+          <!-- Custom content-->
+          <% productDetails.forEach(product => { %>
+          <div class="media align-items-lg-center flex-column flex-lg-row p-3">
+            <div class="media-body order-2 order-lg-1">
+              <h5 class="mt-0 font-weight-bold mb-2">
+                <%= product.productName %>
+              </h5>
+              <p class="text-muted mb-0 small"><%= product.productId %></p>
+              <p>Quantity:<%= product.quantity %></p>
+              <div
+                class="d-flex align-items-center justify-content-between mt-1"
+              >
+                <h6 class="font-weight-bold my-2">
+                  ₹<%= product.productPrice %>
+                </h6>
+              </div>
+            </div>
+            <img
+              src="/images/<%= product.productImage %>"
+              alt="Generic placeholder image"
+              width="200"
+              class="ml-lg-5 order-1 order-lg-2"
+            />
+          </div>
+          <!-- End -->
+          <% }); %>
+        </li>
+        <!-- End -->
+      </ul>
+      <!-- End -->
+    </div>
+
+    <div class="col-lg-12 mx-auto">
+      <!-- List group-->
+      <ul class="list-group shadow">
+        <!-- list group item-->
+        <li class="list-group-item">
+          <div class="dropdown">
+            <button
+              type="button"
+              class="btn btn-secondary btn-sm dropdown-toggle"
+              id="dropdownMenuOffset"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              Order Status
+            </button>
+            <button class="btn" id="statusButton">
+              <%= orderData.orderStatus %>
+            </button>
+            <div class="dropdown">
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuOffset">
+                <a
+                  class="dropdown-item"
+                  href="#"
+                  data-status="Order Placed"
+                  data-orderid="<%= orderData._id %>"
+                  >Order Placed</a
+                >
+                <a
+                  class="dropdown-item"
+                  href="#"
+                  data-status="Shipped"
+                  data-orderid="<%= orderData._id %>"
+                  >Shipped</a
+                >
+                <a
+                  class="dropdown-item"
+                  href="#"
+                  data-status="Dispatched"
+                  data-orderid="<%= orderData._id %>"
+                  >Dispatched</a
+                >
+                <a
+                  class="dropdown-item"
+                  href="#"
+                  data-status="Delivered"
+                  data-orderid="<%= orderData._id %>"
+                  >Delivered</a
+                >
+
+                <% if (orderData.orderStatus === 'Return Processing') { %>
+                <a
+                  class="dropdown-item"
+                  href="#"
+                  data-status="Returned"
+                  data-orderid="<%= orderData._id %>"
+                  >Returned</a
+                >
+                <% } %>
+              </div>
+            </div>
+
+            <script>
+              // Assuming you're using jQuery
+              $(document).ready(function () {
+                const statusButton = $("#statusButton");
+                const orderStatus = "<%= orderData.orderStatus %>"; // The order status from your template
+
+                if (orderStatus === "Delivered") {
+                  statusButton.addClass("btn-success");
+                }
+
+                $(".dropdown-item").click(function () {
+                  const newStatus = $(this).data("status");
+                  const orderid = $(this).data("orderid");
+
+                  // Assuming you want to update the button's text and class when a new status is selected
+                  statusButton.text(newStatus);
+                  if (newStatus === "Delivered") {
+                    statusButton.addClass("text-success");
+                  } else {
+                    statusButton
+                      .removeClass("btn-success")
+                      .addClass("btn-dark");
+                  }
+
+                  // You can perform an AJAX request to update the order status in your database here
+                  // Use the 'newStatus' and 'orderid' variables to send the updated data to your server
+                });
+              });
+            </script>
+          </div>
+
+          <!-- </div> -->
+        </li>
+        <!-- End -->
+        <!-- list group item-->
+      </ul>
+      <!-- End -->
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Add this script to your EJS template -->
+<script>
+  const statusButton = document.getElementById("statusButton");
+  const dropdownItems = document.querySelectorAll(".dropdown-item");
+
+  dropdownItems.forEach((item) => {
+    item.addEventListener("click", function () {
+      const status = item.getAttribute("data-status");
+      const orderId = item.getAttribute("data-orderid"); // Get the orderId
+
+      statusButton.textContent = status;
+      statusButton.classList.remove("btn-dark");
+
+      // Send an AJAX request to update the order status
+      $.ajax({
+        url: `/admin/changeOrderStatus/${orderId}/${status}`,
+        method: "post",
+        success: function (response) {
+          // Handle the response
+          if (response.success) {
+            // Update the status in your UI or show a success message
+            console.log(`Order status updated to ${status}`);
+          } else {
+            // Handle the case when the update failed
+            console.error(`Failed to update order status: ${response.message}`);
+          }
+        },
+        error: function (error) {
+          // Handle AJAX error
+          console.error("Error updating order status:", error);
+        },
+      });
+
+      // Check if the selected status is "Returned" before sending the AJAX request for "returnAccept"
+      if (status === "Returned") {
+        $.ajax({
+          url: `/admin/returnAccept/${orderId}`,
+          method: "post",
+          success: function (response) {
+            if (response.success) {
+              console.log("Order Returned");
+            } else {
+              console.log("Error");
+            }
+          },
+          error: function (error) {
+            console.error("Error processing return:", error);
+          },
+        });
+      }
+    });
+  });
+</script>
+
+<style>
+  body {
+    background-color: azure;
+    min-height: 100vh;
+  }
+  .text-gray {
+    color: #aaa;
+  }
+  img {
+    height: 170px;
+    width: 140px;
+  }
+</style>
+
+<%- include('../layout/adminLayout/adminFooter.ejs') %>

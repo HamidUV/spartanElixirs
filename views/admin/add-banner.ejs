@@ -1,0 +1,65 @@
+<%- include('../layout/adminLayout/adminHeader.ejs') %>
+
+<div class="container-fluid pt-4 px-4" style="margin-top: 130px">
+  <div class="row g-4" style="display: flex; justify-content: center">
+    <div class="col-sm-12 col-xl-6">
+      <a
+        href="/admin/banners"
+        class="btn btn-light box-link"
+        style="margin-bottom: 20px"
+      >
+        <span class="text-gradient"
+          ><i class="fa fa-arrow-left" aria-hidden="true"></i> Go back</span
+        >
+      </a>
+      <div class="bg-light rounded h-100 p-4">
+        <h2 class="mb-4" style="display: flex; justify-content: center">
+          Add Banner
+        </h2>
+
+        <form action="/admin/banners" method="post">
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label"
+              >Banner Name</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id=""
+              name="name"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="formFile" class="form-label">Choose File</label>
+            <input
+              class="form-control"
+              name="image"
+              type="file"
+              id="formFile"
+            />
+          </div>
+
+          <button type="submit" class="btn btn-dark btn-block mb-4">
+            Add Banner
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<% if (typeof message !== 'undefined') { %>
+<p
+  style="
+    color: rgb(4, 161, 67);
+    font-weight: 800;
+    display: flex;
+    justify-content: center;
+    background-color: #fafdf5;
+    padding: 10px;
+    border-radius: 5px;
+  "
+>
+  <%= message %>
+</p>
+<% } %> <%- include('../layout/adminLayout/adminFooter.ejs') %>

@@ -1,0 +1,445 @@
+<%- include('../layout/adminLayout/adminHeader.ejs') %>
+
+<body>
+  <div class="container-xxl position-relative bg-white d-flex p-0">
+    <!-- Spinner Start -->
+    <div
+      id="spinner"
+      class="bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center"
+      style="display: none"
+    >
+      <div
+        class="spinner-border text-primary"
+        style="width: 3rem; height: 3rem"
+        role="status"
+      >
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+    <!-- Spinner End -->
+
+    <!-- Sidebar Start -->
+    <div class="sidebar bg-light">
+      <nav class="navbar bg-light navbar-light">
+        <a href="index.html" class="navbar-brand mx-4 mb-3">
+          <h4 class="text-dark">Dashboard</h4>
+        </a>
+        <div class="d-flex align-items-center ms-4 mb-4">
+          <div class="position-relative">
+            <img
+              class="rounded-circle"
+              src="/images/men.jpg"
+              alt=""
+              style="width: 40px; height: 40px"
+            />
+            <div
+              class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"
+            ></div>
+          </div>
+          <div class="ms-3">
+            <h6 class="mb-0">Admin</h6>
+            <!-- <span>Admin</span> -->
+          </div>
+        </div>
+        <div class="navbar-nav w-100">
+          <a href="/admin/dashboard" class="nav-item nav-link"
+            ><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a
+          >
+          <a href="/admin/products" class="nav-item nav-link"
+            ><i class="fa fa-file me-2"></i>Product</a
+          >
+          <a href="/admin/category-page" class="nav-item nav-link"
+            ><i class="fa fa-th me-2"></i>Category</a
+          >
+
+          <a href="/admin/user-details" class="nav-item nav-link"
+            ><i class="fa fa-user me-2"> </i>Users</a
+          >
+          <a href="/admin/userOrders" class="nav-item nav-link"
+            ><i class="fa fa-table me-2"></i>Orders</a
+          >
+          <a href="/admin/coupon" class="nav-item nav-link"
+            ><i class="fa fa-envelope me-2"></i>Coupon</a
+          >
+          <a href="/admin/banners" class="nav-item nav-link"
+            ><i class="fa fa-image me-2"></i>Banners</a
+          >
+          <a href="/admin/sales-report" class="nav-item nav-link"
+            ><i class="fa fa-keyboard me-2"></i>Sales Report</a
+          >
+          <br />
+          <br />
+
+          <a href="/admin/adminLogout" class="nav-item nav-link"
+            ><i class="fa fa-user me-2"></i>Logout</a
+          >
+        </div>
+      </nav>
+    </div>
+    <!-- Sidebar End -->
+
+    <!-- Content Start -->
+    <div class="content">
+      <!-- Navbar Start -->
+      <nav
+        class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0"
+      >
+        <a href="#" class="sidebar-toggler flex-shrink-0">
+          <i class="fa fa-bars"></i>
+        </a>
+        <div class="navbar-nav align-items-center ms-auto">
+          <div class="nav-item dropdown"></div>
+        </div>
+      </nav>
+      <!-- Navbar End -->
+
+      <script>
+        // Function to show the spinner
+        function showSpinner() {
+          const spinner = document.getElementById("spinner");
+          if (spinner) {
+            spinner.style.display = "block";
+          }
+        }
+
+        // Function to hide the spinner
+        function hideSpinner() {
+          const spinner = document.getElementById("spinner");
+          if (spinner) {
+            spinner.style.display = "none";
+          }
+        }
+
+        // Example usage:
+        // Call showSpinner() before starting an asynchronous operation.
+        // Call hideSpinner() when the operation is complete.
+      </script>
+
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+      <div
+        style="
+          display: flex;
+          justify-content: center;
+          font-family: 'Times New Roman', Times, serif;
+          font-weight: bold;
+          margin-top: 70px;
+          color: #2b2d42;
+        "
+      >
+        <h2>ORDER MANAGEMENT</h2>
+      </div>
+
+      <main id="site-main">
+        <div class="container">
+          <!-- form -->
+          <form action="/" method="POST">
+            <table class="table">
+              <thead class="thead-dark">
+                <tr>
+                  <th>No</th>
+                  <th>Order ID</th>
+                  <th>Total</th>
+                  <th>Payment Method</th>
+                  <th>Order Date</th>
+                  <th>Status</th>
+                  <th>View</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% let counter = 1; %> <% orderData.forEach((order) => { %>
+                <tr>
+                  <td><%= counter %></td>
+                  <td><%=order._id %></td>
+                  <td>₹<%= order.totalAmount %></td>
+                  <td><%= order.paymentType %></td>
+                  <% const formattedDate = order.date.toDateString(); %>
+                  <td><%= formattedDate %></td>
+                  <td>
+                    <% if (order.orderStatus === "Delivered") { %>
+                    <span class="text-green"><%= order.orderStatus %></span>
+                    <% } else if (order.orderStatus === "Dispatched") { %>
+                    <span class="text-yellow"><%= order.orderStatus %></span>
+                    <% } else if (order.orderStatus === "Order Placed") { %>
+                    <span class="text-blue"><%= order.orderStatus %></span>
+                    <% } else if (order.orderStatus === "Shipped") { %>
+                    <span class="text-gray"><%= order.orderStatus %></span>
+                    <% } else if (order.orderStatus === "Returned") { %>
+                    <span class="text-red"><%= order.orderStatus %></span>
+                    <% } else { %> <%= order.orderStatus %> <% } %>
+                  </td>
+
+                  <td>
+                    <a
+                      href="/admin/singleOrder/<%= order._id %>"
+                      class="btn btn-secondary"
+                      >View Details</a
+                    >
+                  </td>
+                </tr>
+                <% counter++; %> <% }); %>
+              </tbody>
+              <style>
+                .text-green {
+                  color: rgb(34, 165, 34);
+                }
+
+                .text-yellow {
+                  color: rgb(0, 0, 0);
+                }
+                .text-blue {
+                  color: rgb(57, 57, 215);
+                }
+                .text-gray {
+                  color: rgb(109, 53, 100);
+                }
+                .text-red {
+                  color: red;
+                }
+              </style>
+            </table>
+          </form>
+        </div>
+      </main>
+
+      <style>
+        @import url("https://fonts.googleapis.com/css2?family=Barlow&family=PT+Sans&display=swap");
+
+        :root {
+          --dark: #2b2d42;
+          --light: #abd5bd;
+          --border: #dee2e6;
+          --border-btn: #edf2f4;
+        }
+
+        * {
+          padding: 0;
+          margin: 0;
+          box-sizing: border-box;
+        }
+
+        a {
+          text-decoration: none;
+          font-family: "PT Sans", sans-serif;
+        }
+        .nav-brand {
+          font-size: 1.5em;
+          font-weight: bold;
+        }
+        .d-flex {
+          display: flex;
+          flex-wrap: wrap;
+        }
+
+        .justify-between {
+          justify-content: space-between;
+        }
+        .text-center {
+          text-align: center;
+        }
+
+        .border-shadow {
+          border: 1px solid var(--border-btn);
+          box-shadow: 1px 3px 10px #e9ecef;
+        }
+
+        .text-dark {
+          color: var(--dark);
+        }
+
+        .inline {
+          display: inline-block;
+        }
+
+        .text-light {
+          color: var(--light);
+        }
+
+        .text-gradient {
+          background: linear-gradient(to right, #8e2de2, #4a00e0);
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+
+        #header nav {
+          background-color: #06d6a0;
+          padding: 1em 0;
+          width: 100%;
+        }
+
+        #site-main {
+          margin-top: 6em;
+          font-family: "Barlow", sans-serif;
+        }
+
+        #site-main .container .box-nav > a {
+          font-size: 1em;
+          padding: 0.5em 1em;
+        }
+
+        #site-main .container form {
+          margin: 2em 0;
+        }
+
+        table {
+          border-spacing: 0px;
+          width: 100%;
+        }
+
+        .table td,
+        .table th {
+          padding: 0.75em;
+          vertical-align: top;
+          text-align: center;
+          border-top: 1px solid var(--border);
+        }
+
+        .table td > a.btn {
+          padding: 0.3em 1em;
+          font-size: 1.1em;
+          margin: 0 0.2em;
+        }
+
+        .table tr:hover {
+          background-color: #90eed5;
+        }
+
+        .table tr:hover td > a {
+          box-shadow: none;
+        }
+
+        .table .thead-dark th {
+          color: #fff;
+          background-color: var(--dark);
+          border-color: #32383e;
+        }
+
+        @media only screen and (max-width: 1024px) {
+          table,
+          thead,
+          tbody,
+          th,
+          td,
+          tr {
+            display: block;
+          }
+          thead tr {
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
+          }
+
+          tr {
+            border: 1px solid var(--border);
+          }
+
+          td {
+            border: none;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+          }
+        }
+
+        /* next : add_user & update_user */
+
+        .form-title {
+          margin-top: 2em;
+        }
+
+        .form-title > h2 {
+          padding: 0.5em;
+        }
+
+        .new_user {
+          max-width: 786px;
+          margin: auto;
+        }
+
+        #update_user .form-group,
+        #add_user .form-group {
+          margin: 4em 0;
+        }
+
+        #update_user .form-group input[type="text"],
+        #add_user .form-group input[type="text"] {
+          width: 100%;
+          padding: 0.6em 1em;
+          margin: 0.5em 0;
+          border: 1px solid var(--border);
+          font-family: "Barlow", sans-serif;
+          font-size: 1em;
+          border-radius: 0.2em;
+        }
+
+        #update_user .form-group .radio,
+        #add_user .form-group {
+          margin: 1em 2em;
+        }
+
+        /* radio button style */
+        .radio input[type="radio"] {
+          position: absolute;
+          opacity: 0;
+        }
+
+        .radio input[type="radio"] + .radio-label:before {
+          content: "";
+          background: var(--border-btn);
+          border-radius: 100%;
+          border: 1px solid var(--border);
+          display: inline-block;
+          width: 1em;
+          height: 1em;
+          position: relative;
+          top: -0em;
+          margin-right: 5em;
+          vertical-align: top;
+          cursor: pointer;
+          text-align: center;
+          -webkit-transition: all 250ms ease;
+          transition: all 250ms ease;
+        }
+
+        .radio input[type="radio"]:checked + .radio-label:before {
+          background-color: #06d6a0;
+          box-shadow: inset 0 0 0 4px #e9ecef;
+        }
+
+        .radio input[type="radio"]:focus + .radio-label:before {
+          outline: none;
+          border-color: #06d6a0;
+        }
+
+        .radio input[type="radio"]:disabled + .radio-label:before {
+          box-shadow: inset 0 0 0 4px #e9ecef;
+          border-color: #b4b4b4;
+          background: #b4b4b4;
+        }
+
+        #update_user .form-group .btn,
+        #add_user .form-group .btn {
+          width: 100%;
+          padding: 0.9em 1em;
+          background-color: #06d6a0;
+          border: none;
+          font-family: "PT Sans", sans-serif;
+          font-size: 1em;
+          cursor: pointer;
+          border-radius: 0.2em;
+          margin: 0.5em 0;
+        }
+
+        #update_user .form-group .btn:hover,
+        #add_user .form-group .btn:hover {
+          background-color: var(--dark);
+          color: var(--border);
+        }
+      </style>
+
+      <%- include('../layout/adminLayout/adminFooter.ejs') %>
+    </div>
+  </div>
+</body>

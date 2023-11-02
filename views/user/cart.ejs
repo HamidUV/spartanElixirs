@@ -1,0 +1,325 @@
+<%- include('../layout/userLayout/userHeader.ejs') %>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+  integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+  crossorigin="anonymous"
+/>
+
+<div class="bg-light py-3">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 mb-0">
+        <a href="/">Home</a> <span class="mx-2 mb-0">/</span>
+        <strong class="text-black">Cart</strong>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="site-section">
+  <div class="container">
+    <div class="row mb-5">
+      <form class="col-md-12" method="post">
+        <div class="site-blocks-table">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th class="product-thumbnail">Image</th>
+                <th class="product-name">Product</th>
+                <th class="product-price">Price</th>
+                <th class="product-quantity">Quantity</th>
+                <th class="product-total">Total</th>
+                <th class="product-remove">Action</th>
+              </tr>
+            </thead>
+
+            <!-- Table body -->
+            <tbody>
+              <% Cart.forEach((product) => { %>
+              <tr>
+                <td class="product-thumbnail">
+                  <img
+                    src="/images/<%= product.productImage %>"
+                    alt="Image"
+                    class="img-fluid"
+                  />
+                </td>
+                <td>
+                  <h2 class="h5 text-black"><%= product.productName %></h2>
+                </td>
+                <td id="price_<%= product.productId %>">
+                  ₹<%= product.price %>
+                </td>
+                <td>
+                  <div class="mb-5">
+                    <div class="input-group mb-3" style="max-width: 120px">
+                      <div class="input-group-prepend">
+                        <button
+                          id="decrease_<%= product.productId %>"
+                          onclick="changeQuantity('<%= product.productId %>', -1)"
+                          class="btn btn-outline-primary js-btn-minus"
+                        >
+                          −
+                        </button>
+                      </div>
+                      <input
+                        class="form-control text-center quantity-input"
+                        id="quantity_<%= product.productId %>"
+                        value="<%= product.quantity %>"
+                        placeholder=""
+                        aria-label="Example text with button addon"
+                        aria-describedby="button-addon1"
+                      />
+                      <div class="input-group-append">
+                        <button
+                          id="increase_<%= product.productId %>"
+                          onclick="changeQuantity('<%= product.productId %>', 1)"
+                          class="btn btn-outline-primary js-btn-plus"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td id="total_<%= product.productId %>">
+                  ₹<%= (product.quantity * product.price).toFixed(1) %>
+                </td>
+                <td>
+                  <a
+                    href="javascript:void(0)"
+                    onclick="handleDelete('<%= product.productId %>')"
+                  >
+                    <span
+                      class="btn btn-danger"
+                      style="
+                        color: rgb(255, 255, 255);
+                        background-color: #ff0000;
+                      "
+                      >X</span
+                    >
+                  </a>
+                </td>
+              </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      </form>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <br />
+        <br />
+      </div>
+      <div class="col-md-6 pl-5">
+        <div class="row justify-content-end">
+          <div class="col-md-7">
+            <div class="row">
+              <div class="col-md-12 text-right border-bottom mb-5">
+                <h3 class="text-black h4 text-uppercase">Cart Totals</h3>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <span class="text-black">Subtotal</span>
+              </div>
+              <div class="col-md-6 text-right">
+                <% let subtotal = 0; %> <% Cart.forEach((product) => { %> <%
+                subtotal += product.quantity * product.price; %> <% }); %>
+                <strong id="subtotal" class="text-black"
+                  >₹<%= subtotal.toFixed(2) %></strong
+                >
+              </div>
+            </div>
+
+            <div class="row mb-5">
+              <div class="col-md-6">
+                <span class="text-black">Total</span>
+              </div>
+              <div class="col-md-6 text-right">
+                <strong id="totalPrice" class="text-black"
+                  >₹<%= subtotal.toFixed(2) %></strong
+                >
+              </div>
+            </div>
+
+            <!-- Your other HTML and JavaScript code -->
+
+            <div class="row">
+              <div class="col-md-12">
+                <a href="/checkout">
+                  <button class="btn btn-primary btn-lg py-3 btn-block">
+                    Proceed To Checkout
+                  </button></a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Include the script outside the loop -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+  function updateSubtotalAndTotal(cart) {
+    let subtotal = 0;
+    let totalPrice = 0;
+
+    cart.forEach((product) => {
+      subtotal += product.quantity * product.price;
+    });
+
+    let subtotalElement = document.getElementById("subtotal");
+    if (subtotalElement) {
+      subtotalElement.innerHTML = "₹" + subtotal.toFixed(2);
+    }
+
+    let totalElement = document.getElementById("totalPrice");
+    if (totalElement) {
+      totalElement.innerHTML = "₹" + totalPrice.toFixed(2);
+    }
+
+    // Call the function to update checkout prices dynamically
+    updateCheckoutPrices();
+  }
+
+  function updateCheckoutPrices() {
+    $.ajax({
+      url: "/update-checkout-total-price",
+      method: "post",
+      success: function (response) {
+        // Update Subtotal and Total dynamically
+        updateSubtotalAndTotal(response.cart);
+      },
+      error: function (error) {
+        console.error("Error updating checkout prices:", error.responseText);
+      },
+    });
+  }
+
+  function changeQuantity(productId, change) {
+    console.log(
+      "changeQuantity function called with productId:",
+      productId,
+      "and change:",
+      change
+    );
+
+    // Get the current quantity value
+    let currentQuantityElement = document.getElementById(
+      "quantity_" + productId
+    );
+    let currentQuantity = parseInt(currentQuantityElement.value);
+
+    // Check if the change will make the quantity less than or equal to 1
+    if (currentQuantity + change <= 0) {
+      alert("Minimum quantity reached.");
+
+      let decreaseButton = document.getElementById("decrease_" + productId);
+      if (decreaseButton) {
+        decreaseButton.disabled = true;
+      }
+
+      console.log(change, "show this.....");
+      return;
+    }
+
+    // Enable the '-' button if quantity is greater than 1
+    let decreaseButton = document.getElementById("decrease_" + productId);
+    if (decreaseButton) {
+      decreaseButton.disabled = false;
+    }
+
+    $.ajax({
+      url: "/change-product-quantity/" + productId,
+      method: "post",
+      data: { change },
+      success: function (response) {
+        console.log(response.cart, "-----------");
+        console.log(response.count, "--!!!!!!---");
+        // Update the UI with the new quantity and total price
+        updateUI(productId, response);
+        // Fetch and update the checkout prices dynamically
+        updateCheckoutPrices();
+      },
+      error: function (error) {
+        alert("Error changing quantity: " + error.responseText);
+        console.log("Error changing quantity: " + error.responseText);
+      },
+    });
+  }
+
+  function updateUI(productId, response) {
+    // Assuming each product has a unique identifier
+    // Update the correct product's price and quantity
+    let productIndex = response.cart.findIndex(
+      (product) => product.productId === productId
+    );
+    if (productIndex !== -1) {
+      let newQuantity = response.cart[productIndex].quantity;
+      let pricePerItem = response.cart[productIndex].price;
+
+      let totalElement = document.getElementById("total_" + productId);
+      totalElement.innerHTML = (newQuantity * pricePerItem).toFixed(2);
+
+      // Update subtotal and total
+      let subtotal = 0;
+      response.cart.forEach((product) => {
+        subtotal += product.quantity * product.price;
+      });
+
+      // Update the subtotal in the UI
+      let subtotalElement = document.getElementById("subtotal");
+      if (subtotalElement) {
+        subtotalElement.innerHTML = "₹" + subtotal.toFixed(2);
+      }
+
+      // Update the total dynamically
+      let totalPrice = 0;
+      response.cart.forEach((product) => {
+        totalPrice += product.quantity * product.price;
+      });
+
+      let coupon = 0; // Assuming you have the coupon amount available
+      totalPrice += coupon;
+
+      let totalPriceElement = document.getElementById("totalPrice");
+      if (totalPriceElement) {
+        totalPriceElement.innerHTML = "₹" + totalPrice.toFixed(2);
+      }
+
+      // Call the function to update checkout prices dynamically
+      updateCheckoutPrices(subtotal, totalPrice); // You might need to adjust the second argument based on your logic
+    }
+  }
+
+</script>
+
+<script>
+  function handleDelete(productId) {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = `/remove-from-cart/${productId}`;
+      }
+    });
+  }
+</script>
+
+<%- include('../layout/userLayout/userFooter.ejs') %>

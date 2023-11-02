@@ -1,0 +1,332 @@
+<%- include('../layout/userLayout/userHeaderMini.ejs') %>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<body>
+  <div
+    class="box-nav d-flex justify-between"
+    style="margin-top: 30px; margin-left: 80px"
+  >
+    <a href="/orders" class="border-shadow">
+      <span class="text-gradient"
+        ><i class="fa-solid fa-arrow-left"></i> Go back</span
+      >
+    </a>
+  </div>
+
+  <div
+    style="
+      display: flex;
+      justify-content: center;
+      font-family: sans-serif;
+      font-weight: bold;
+      margin-top: 30px;
+      color: #32383e;
+    "
+  >
+    <h2>ORDER DETAILS</h2>
+  </div>
+
+  <main id="site-main">
+    <div class="container">
+      <% if (order) { %>
+      <section class="container-fluid py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+          <div class="col-lg-12 col-xl-10">
+            <div
+              class="p"
+              style="
+                border-radius: 10px;
+                background: #fff;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+              "
+            >
+              <div class="p-4">
+                <div
+                  class="mb-4"
+                  style="display: flex; justify-content: space-between"
+                >
+                  <p class="small text-muted" style="font-weight: bold">
+                    Order Id: <%= order._id %>
+                  </p>
+                  <% if (order.orderStatus === 'Delivered') { %>
+                  <div>
+                    <button
+                      id="returnButton"
+                      class="return-button btn btn-outline-danger"
+                      data-order-id="<%= order._id %>"
+                    >
+                      Return
+                    </button>
+                  </div>
+                  <% } %>
+                </div>
+
+                <% order.productDetails.forEach(product => { %>
+                <div class="row align-items-center mb-4" style="color: #32383e">
+                  <div class="col-md-2">
+                    <img
+                      src="/images/<%= product.productImage %>"
+                      class="img-fluid"
+                      alt="Phone"
+                    />
+                  </div>
+                  <div class="col-md-4 text-center">
+                    <p><%= product.productName %></p>
+                  </div>
+                  <div class="col-md-2 text-center">
+                    <p><%= product.quantity %></p>
+                  </div>
+                  <div class="col-md-4 text-center">
+                    <p>₹ <%= product.productPrice %></p>
+                  </div>
+                </div>
+                <% }); %>
+
+                <hr
+                  style="background-color: #e0e0e0; opacity: 1; margin: 1rem 0"
+                />
+
+                <div>
+                  <p
+                    class="text-muted mb-0"
+                    style="
+                      display: flex;
+                      justify-content: end;
+                      color: #32383e;
+                      font-weight: bold;
+                    "
+                  >
+                    <span class="fw-bold me-4">Coupon :&nbsp;&nbsp;</span>₹ <%=
+                    order.discountAmount %>
+                  </p>
+                  <p
+                    class="text-muted mb-0"
+                    style="
+                      display: flex;
+                      justify-content: end;
+                      color: #32383e;
+                      font-weight: bold;
+                    "
+                  >
+                    <span class="fw-bold me-4"
+                      >Total &nbsp;&nbsp;&nbsp;:&nbsp; &nbsp;&nbsp;</span
+                    >₹ <%= order.totalAmount %>
+                  </p>
+                </div>
+
+                <hr
+                  style="background-color: #e0e0e0; opacity: 1; margin: 1rem 0"
+                />
+                <br />
+
+                <div class="row align-items-center">
+                  <div class="col-md-6">
+                    <p>
+                      Receipt Number:
+                      <span style="font-weight: 800"><%= order.orderId %></span>
+                    </p>
+                  </div>
+                  <div
+                    class="col-md-6"
+                    style="
+                      display: flex;
+                      justify-content: end;
+                      font-weight: 900;
+                      color: #1a2350;
+                    "
+                  >
+                    <p
+                      class="<%= order.orderStatus === 'Delivered' ? 'btn btn-success' : (order.orderStatus === 'Returned' ? 'btn btn-danger' : 'btn btn-dark') %>"
+                    >
+                      <%= order.orderStatus %>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <br />
+            <h4 style="color: #32383e">Address</h4>
+            <div class="d-flex justify-content-between pt-2">
+              <p class="mb-0" style="color: #32383e">
+                <%= order.address.name %>, <%= order.address.address %>, <%=
+                order.address.country %>, <%= order.address.state %>, Pin: <%=
+                order.address.postalZip %> <br />
+                <%= order.address.phoneNumber %><br />
+                <%= order.address.email %><br />
+              </p>
+            </div>
+            <br />
+
+            <div
+              class="px-4 py-3"
+              style="
+                background-color: #1a2350;
+                border-bottom-left-radius: 10px;
+                border-bottom-right-radius: 10px;
+              "
+            >
+              <h5
+                class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0"
+              >
+                TOTAL&nbsp; :&nbsp; &nbsp;<span class="h5 mb-0 ms-2"
+                  >₹ <%= order.totalAmount %></span
+                >
+              </h5>
+            </div>
+          </div>
+        </div>
+      </section>
+      <% } else { %>
+      <p>No order found with the provided ID.</p>
+      <% } %>
+    </div>
+  </main>
+
+  <!-- Modal for Return Reason -->
+  <div
+    class="modal fade"
+    id="returnReasonModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="returnReasonModalTitle"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="returnReasonModalTitle">
+            Select a Reason for return
+          </h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="returnReasonForm" enctype="application/x-www-form-urlencoded">
+          <div class="modal-body">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="returnReason"
+                id="reason1"
+                value="Sensitivity"
+              />
+              <label class="form-check-label" for="reason1">
+                Sensitivity: Allergic reaction to the scent or ingredients.
+              </label>
+            </div>
+            <br />
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="returnReason"
+                id="reason2"
+                value="DamagedBottle"
+              />
+              <label class="form-check-label" for="reason2">
+                Damaged Bottle: Leaking or broken bottle on arrival.
+              </label>
+            </div>
+            <br />
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="returnReason"
+                id="reason3"
+                value="Expectation"
+              />
+              <label class="form-check-label" for="reason3">
+                Expectation: Scent or brand doesn't match expectations.
+              </label>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="submit" class="btn btn-primary" id="confirmReturn">
+              Confirm Return
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let selectedReason; // Define the selectedReason variable
+
+    // Show the return reason modal when the "Return" button is clicked
+    $("#returnButton").click(function () {
+      $("#returnReasonModal").modal("show");
+    });
+
+    // Handle the return reason form submission
+    $("#returnReasonForm").on("submit", function (event) {
+      event.preventDefault();
+      // Close the return reason modal
+      $("#returnReasonModal").modal("hide");
+      // Capture the selected return reason
+      selectedReason = $("input[name='returnReason']:checked").val();
+
+      // Show a SweetAlert confirmation dialog
+      Swal.fire({
+        title: "Confirm Return",
+        text: "Are you sure you want to return this order?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, return it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Initiate the return processing by making an AJAX request
+          const orderId = $("#returnButton").data("order-id");
+          $.ajax({
+            url: `/returnProduct/${orderId}`,
+            method: "post",
+            data: JSON.stringify({ returnReason: selectedReason }), // Send the data as JSON
+            contentType: "application/json",
+            success: function (response) {
+              if (response.success) {
+                if (response.orderData.orderStatus === "Return Processing") {
+                  // Handle return processing started
+                  location.reload();
+                } else if (response.orderData.orderStatus === "Returned") {
+                  // Handle the case when the order is already returned
+                  Swal.fire(
+                    "Order Already Returned",
+                    "This order has already been returned.",
+                    "info"
+                  );
+                } else {
+                  // Handle other cases if needed
+                }
+              }
+            },
+            error: function (error) {
+              console.log(error);
+            },
+          });
+        }
+      });
+    });
+  </script>
+
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+  <script src="https://pingendo.com/assets/bootstrap/bootstrap-4.0.0-alpha.6.min.js"></script>
+</body>

@@ -1,0 +1,264 @@
+<%- include('../layout/adminLayout/adminHeader.ejs') %>
+<script src="https://cdn.jsdelivr.net/npm/exceljs@4.0.1/dist/exceljs.min.js"></script>
+<div class="container-xxl position-relative bg-white d-flex p-0">
+  <div
+    id="spinner"
+    class="bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center"
+    style="display: none"
+  >
+    <div
+      class="spinner-border text-primary"
+      style="width: 3rem; height: 3rem"
+      role="status"
+    >
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+
+  <div class="sidebar pe-4 pb-3">
+    <nav class="navbar bg-light navbar-light">
+      <a href="index.html" class="navbar-brand mx-4 mb-3">
+        <h4 class="text-dark">Dashboard</h4>
+      </a>
+      <div class="d-flex align-items-center ms-4 mb-4">
+        <div class="position-relative">
+          <img
+            class="rounded-circle"
+            src="/images/men.jpg"
+            alt=""
+            style="width: 40px; height: 40px"
+          />
+          <div
+            class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"
+          ></div>
+        </div>
+        <div class="ms-3">
+          <h6 class="mb-0">Admin</h6>
+        </div>
+      </div>
+      <div class="navbar-nav w-100">
+        <a href="/admin/dashboard" class="nav-item nav-link"
+          ><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a
+        >
+        <a href="/admin/products" class="nav-item nav-link"
+          ><i class="fa fa-file me-2"></i>Product</a
+        >
+        <a href="/admin/category-page" class="nav-item nav-link"
+          ><i class="fa fa-th me-2"></i>Category</a
+        >
+        <a href="/admin/user-details" class="nav-item nav-link"
+          ><i class="fa fa-user me-2"></i>Users</a
+        >
+        <a href="/admin/userOrders" class="nav-item nav-link"
+          ><i class="fa fa-table me-2"></i>Orders</a
+        >
+        <a href="/admin/coupon" class="nav-item nav-link"
+          ><i class="fa fa-envelope me-2"></i>Coupon</a
+        >
+        <a href="/admin/banners" class="nav-item nav-link"
+          ><i class="fa fa-image me-2"></i>Banners</a
+        >
+        <a href="/admin/sales-report" class="nav-item nav-link"
+          ><i class="fa fa-keyboard me-2"></i>Sales Report</a
+        >
+        <a href="/admin/adminLogout" class="nav-item nav-link"
+          ><i class="fa fa-user me-2"></i>Logout</a
+        >
+      </div>
+    </nav>
+  </div>
+
+  <div class="content">
+    <nav
+      class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0"
+    >
+      <a href="#" class="sidebar-toggler flex-shrink-0">
+        <i class="fa fa-bars"></i>
+      </a>
+      <div class="navbar-nav align-items-center ms-auto">
+        <div class="nav-item dropdown"></div>
+      </div>
+    </nav>
+    <script>
+      // Function to show the spinner
+      function showSpinner() {
+        const spinner = document.getElementById("spinner");
+        if (spinner) {
+          spinner.style.display = "block";
+        }
+      }
+      // Function to hide the spinner
+      function hideSpinner() {
+        const spinner = document.getElementById("spinner");
+        if (spinner) {
+          spinner.style.display = "none";
+        }
+      }
+      // Example usage:
+      // Call showSpinner() before starting an asynchronous operation.
+      // Call hideSpinner() when the operation is complete.
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <div
+      style="
+        display: flex;
+        justify-content: center;
+        font-family: 'Times New Roman', Times, serif;
+        font-weight: bold;
+        margin-top: 70px;
+        color: #2b2d42;
+      "
+    >
+      <h2>SALES REPORTS</h2>
+    </div>
+
+    <main id="site-main">
+      <div class="container">
+        <div class="container-fluid pt-4" style="margin-top: 50px">
+          <div class="row g-4">
+            <div class="col-sm-6 col-xl-3">
+              <div
+                class="bg-light rounded d-flex align-items-center justify-content-between p-4"
+              >
+                <i class="fa fa-chart-line fa-3x text-success"></i>
+                <div class="ms-3">
+                  <p class="mb-2">Today Sale</p>
+                  <h6 class="mb-0" style="font-weight: 600">
+                    <%= todaySalesCount %>
+                  </h6>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-xl-3">
+              <div
+                class="bg-light rounded d-flex align-items-center justify-content-between p-4"
+              >
+                <i class="fa fa-chart-bar fa-3x text-success"></i>
+                <div class="ms-3">
+                  <p class="mb-2">Total Sale</p>
+                  <h6 class="mb-0">
+                    <span style="font-weight: 600"><%= totalSalesCount %></span>
+                  </h6>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-xl-3">
+              <div
+                class="bg-light rounded d-flex align-items-center justify-content-between p-4"
+              >
+                <i class="fa fa-chart-area fa-3x text-success"></i>
+                <div class="ms-3">
+                  <p class="mb-2">Today Revenue</p>
+                  <h6 class="mb-0" style="font-weight: 600">
+                    ₹<%= todaySales %>
+                  </h6>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-xl-3">
+              <div
+                class="bg-light rounded d-flex align-items-center justify-content-between p-4"
+              >
+                <i class="fa fa-chart-pie fa-3x text-success"></i>
+                <div class="ms-3">
+                  <p class="mb-2">Total Revenue</p>
+                  <h6 class="mb-0" style="font-weight: 600">
+                    ₹<%= totalSales %>
+                  </h6>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="background-color: #e6e7e9; margin-top: 60px">
+          <div style="margin-top: 20px; display: flex">
+            <div class="btn btn-dark btn-sm btn-block">SALES</div>
+            <div class="btn btn-secondary btn-sm btn-block">
+              This Week :
+              <span style="font-weight: 600"><%= salesCountThisWeek %></span>
+            </div>
+            <div class="btn btn-secondary btn-sm btn-block">
+              This Month :
+              <span style="font-weight: 600"> <%= salesCountThisMonth %></span>
+            </div>
+
+            <div class="btn btn-secondary btn-sm btn-block">
+              This Year :
+              <span style="font-weight: 600"><%= salesCountThisYear %></span>
+            </div>
+          </div>
+          <div style="display: flex">
+            <div class="btn btn-dark btn-sm btn-block">REVENUE</div>
+            <div class="btn btn-secondary btn-sm btn-block">
+              This Week :
+              <span style="font-weight: 600">₹<%= revenueThisWeek %></span>
+            </div>
+            <div class="btn btn-secondary btn-sm btn-block">
+              This Month :
+              <span style="font-weight: 600">₹<%= revenueThisMonth %></span>
+            </div>
+
+            <div class="btn btn-secondary btn-sm btn-block">
+              This Year :
+              <span style="font-weight: 600">₹<%= revenueThisYear %></span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: end; margin-top: 60px">
+          <div style="margin-right: 5px">
+            <a class="btn btn-outline-warning" href="/admin/exportPDF"
+              >DOWNLOAD PDF</a
+            >
+          </div>
+          <div>
+            <a class="btn btn-outline-warning" href="/admin/exportExcel"
+              >DOWNLOAD EXCEL</a
+            >
+          </div>
+        </div>
+
+        <form action="/" method="POST" style="margin-top: 10px">
+          <table class="table">
+            <thead class="thead-dark">
+              <tr>
+                <th>No</th>
+                <th>User Id</th>
+                <th>Product</th>
+                <th>Order Date</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total Amount</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% let counter = 1; %> <% orderDatas.forEach((orderData) => { %>
+              <tr>
+                <td><%= counter %></td>
+                <td><%= orderData.userId %></td>
+                <td>
+                  <% orderData.productDetails.forEach((productDetail) => { %>
+                  <%= productDetail.productName %>
+                  <br />
+                  <% }); %>
+                </td>
+                <% const formattedDate = orderData.date.toDateString(); %>
+                <td><%= formattedDate %></td>
+                <td>₹<%= orderData.subtotal %></td>
+                <td><%= orderData.cartCount %></td>
+                <td>₹<%= orderData.totalAmount %></td>
+                <td><%= orderData.orderStatus %></td>
+              </tr>
+              <% counter++; %> <% }); %>
+            </tbody>
+          </table>
+        </form>
+      </div>
+    </main>
+  </div>
+</div>
+<script src="exceljs.bare.js"></script>
+<%- include('../layout/adminLayout/adminFooter.ejs') %>
