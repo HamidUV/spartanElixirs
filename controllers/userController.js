@@ -37,16 +37,16 @@ const sendVerifyMail = async(name,email,insertedId)=>{
         pass: nodemailpassword,
       },
         });
-        //Password : jxapknckqisogfge
-        console.log(insertedId,"userID set aann");
         
         const mailOptions = {
             from: emailUser,
             to: email,
             subject: "For verification",              
             html:
+
+            `<p>Hello ${name}, please click <a href="https://spartanelixirs.shop/verify?id=${insertedId}">here</a> to verify your email.</p>`,
+
             
-            `<p>Hii ${name} Please click here to <a href="http://localhost:3003/verify?id=${insertedId}">Verify</a> your mail.</p>`,
               
           }; 
           
@@ -87,7 +87,7 @@ const sendResetPasswordMail = async(name,email,token)=>{
             subject: "For reset-password",              
             html:
             
-            `<p>Hii ${name} Please click here to <a href="http://localhost:3003/forget-password?token=${token}">reset</a> your password.</p>`,
+            `<p>Hii ${name} Please click here to <a href="https://spartanelixirs.com/forget-password?token=${token}">reset</a> your password.</p>`,
               
           }; 
           

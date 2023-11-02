@@ -113,20 +113,11 @@
 
         <script>
           function selectAddress(addressId) {
-            console.log(addressId,"what");
-              // Assuming you have a function to fetch the address element by its ID
               const addressElement = document.getElementById(addressId);
-              console.log("start");
-      
-              // Do something with the selected address element, for example, apply some styles
               if (addressElement) {
                  console.log(addressElement,"address");
 
-                 
-
               }
-      
-              // Perform any other actions you need when an address is selected
           }
       </script>
       
@@ -251,7 +242,7 @@
                 <p id="zip_error" style="color: red;"></p>
                 
                 <div class="form-group">
-                  <button type="submit" class="btn btn-outline-dark" onclick="addAddress()">Add Address</button>
+                  <button class="btn btn-outline-dark" onclick="addAddress()">Add Address</button>
                 </div>
               </div>
     
@@ -259,103 +250,96 @@
           </div>
           
 
-          <script>
+ <script>
 
-function storeCurrentRouteAndNavigate(targetRoute) {
-  // Get the current route and store it in local storage
-  const currentRoute = window.location.pathname;
-  localStorage.setItem('previousRoute', currentRoute);
-
-  // Navigate to the target route
-  window.location.href = targetRoute;
-}
-
-
-
-document.addEventListener('DOMContentLoaded', function () {
-
-const nameInputElement = document.getElementById('c_name');
-    const errorNameElement = document.getElementById('name_error');
-
-    nameInputElement.addEventListener('input', function(){
-        const nameValue = nameInputElement.value.trim();
-
-        if (!/^[a-zA-Z\s]+$/.test(nameValue))  {
-            nameInputElement.setCustomValidity('Please enter a valid name with only letters');
-            errorNameElement.textContent = 'Please enter a valid name with only letters';
-        } else if (nameValue.length < 4) {
-            nameInputElement.setCustomValidity('Please enter a name with more than 3 letters');
-            errorNameElement.textContent = 'Please enter a name with more than 3 letters';
-        } else {
-            nameInputElement.setCustomValidity('');
-            errorNameElement.textContent = '';
-        }
-            
-    });
-
-});
-
-
-
-            document.addEventListener('DOMContentLoaded', function () {
-    const numberInputElement = document.getElementById('c_number');
-    const errorMsgElement = document.getElementById('number_error');
-    
-    numberInputElement.addEventListener('input', function () {
-        const numberValue = numberInputElement.value.trim();
-
-        if (numberValue.length !== 10) {
-            numberInputElement.setCustomValidity('Mobile number must be exactly 10 digits.');
-            errorMsgElement.textContent = 'Mobile number must be exactly 10 digits.';
-        } else {
-            numberInputElement.setCustomValidity('');
-            errorMsgElement.textContent = '';
-        }
-    });
-});
-
-
-document.addEventListener('DOMContentLoaded', function () {
-
-const emailInputElement = document.getElementById('c_mail');
-const errorMailElement = document.getElementById('mail_error');
-
-emailInputElement.addEventListener('input', function(){
-    const emailValue = emailInputElement.value.trim();
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-    if (!emailRegex.test(emailValue)) {
-        emailInputElement.setCustomValidity('Please enter a valid email address');
-        errorMailElement.textContent = 'Please enter a valid email address';
-    } else {
-        emailInputElement.setCustomValidity('');
-        errorMailElement.textContent = '';
+    function storeCurrentRouteAndNavigate(targetRoute) {
+      const currentRoute = window.location.pathname;
+      localStorage.setItem('previousRoute', currentRoute);
+      window.location.href = targetRoute;
     }
 
-        
-});
 
-});
-document.addEventListener('DOMContentLoaded', function () {
-    const zipInputElement = document.getElementById('c_postal_zip');
-    const errorZipElement = document.getElementById('zip_error');
-    
-    zipInputElement.addEventListener('input', function () {
-        const numberValue = zipInputElement.value.trim();
 
-        if (numberValue.length !== 6) {
-          zipInputElement.setCustomValidity('Pincode must be exactly 6 digits.');
-          errorZipElement.textContent = 'Pincode must be exactly 6 digits..';
-        } else {
-          zipInputElement.setCustomValidity('');
-            errorZipElement.textContent = '';
-        }
+    document.addEventListener('DOMContentLoaded', function () {
+
+    const nameInputElement = document.getElementById('c_name');
+        const errorNameElement = document.getElementById('name_error');
+
+        nameInputElement.addEventListener('input', function(){
+            const nameValue = nameInputElement.value.trim();
+
+            if (!/^[a-zA-Z\s]+$/.test(nameValue))  {
+                nameInputElement.setCustomValidity('Please enter a valid name with only letters');
+                errorNameElement.textContent = 'Please enter a valid name with only letters';
+            } else if (nameValue.length < 4) {
+                nameInputElement.setCustomValidity('Please enter a name with more than 3 letters');
+                errorNameElement.textContent = 'Please enter a name with more than 3 letters';
+            } else {
+                nameInputElement.setCustomValidity('');
+                errorNameElement.textContent = '';
+            }
+                
+        });
+
     });
-});
 
+    document.addEventListener('DOMContentLoaded', function () {
+        const numberInputElement = document.getElementById('c_number');
+        const errorMsgElement = document.getElementById('number_error');
+        
+        numberInputElement.addEventListener('input', function () {
+            const numberValue = numberInputElement.value.trim();
+
+            if (numberValue.length !== 10) {
+                numberInputElement.setCustomValidity('Mobile number must be exactly 10 digits.');
+                errorMsgElement.textContent = 'Mobile number must be exactly 10 digits.';
+            } else {
+                numberInputElement.setCustomValidity('');
+                errorMsgElement.textContent = '';
+            }
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+    const emailInputElement = document.getElementById('c_mail');
+    const errorMailElement = document.getElementById('mail_error');
+
+    emailInputElement.addEventListener('input', function(){
+        const emailValue = emailInputElement.value.trim();
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+        if (!emailRegex.test(emailValue)) {
+            emailInputElement.setCustomValidity('Please enter a valid email address');
+            errorMailElement.textContent = 'Please enter a valid email address';
+        } else {
+            emailInputElement.setCustomValidity('');
+            errorMailElement.textContent = '';
+        }
 
             
-          </script>
+    });
+
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const zipInputElement = document.getElementById('c_postal_zip');
+        const errorZipElement = document.getElementById('zip_error');
+        
+        zipInputElement.addEventListener('input', function () {
+            const numberValue = zipInputElement.value.trim();
+
+            if (numberValue.length !== 6) {
+              zipInputElement.setCustomValidity('Pincode must be exactly 6 digits.');
+              errorZipElement.textContent = 'Pincode must be exactly 6 digits..';
+            } else {
+              zipInputElement.setCustomValidity('');
+                errorZipElement.textContent = '';
+            }
+        });
+    });
+            
+</script>
           
 
 
@@ -477,15 +461,12 @@ document.addEventListener('DOMContentLoaded', function () {
                         <p class="mb-0">Simplify payments with your wallet</p>
                         <p style="font-weight: 600;"> Amount : <%= walletData.totalAmount %></p>
                       </div>
-                    </div>
-                  
-                    
+                    </div>                   
                   </div>
-                  
-                  <div class="form-group">
-                    <button class="btn btn-primary btn-lg py-3 btn-block" id="placeOrderButton">Place Order</button>
+                 
+                 <div class="form-group">
+                    <button class="btn btn-primary btn-lg py-3 btn-block" id="placeOrderButton" >Place Order</button>
                   </div>
-
             </div>
           </div>
 
@@ -499,10 +480,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-
-
 function applyCoupon() {
-  // Assuming you have a text input for coupon code with id 'coupon'
   const couponCode = document.getElementById('coupon').value;
 
   // AJAX request to apply the coupon
@@ -512,16 +490,13 @@ function applyCoupon() {
     data: { couponCode },
     success: function (response) {
       if (response.error) {
-        // Handle error messages from the server
         alert(response.error);
       } 
       else if (response.discountAmount) {
-        // Extract coupon data from the response
         const discountAmount = parseFloat(response.discountAmount);
         const subtotal = parseFloat($('#subtotal').text().replace('₹', ''));
         const minimumAmount = parseFloat(response.minimumAmount);
 
-        // Check if the subtotal is greater than or equal to the minimum amount
         if (subtotal >= minimumAmount) {
           let discountElement = document.getElementById('totalPrice');
           if (discountElement) {
@@ -529,8 +504,6 @@ function applyCoupon() {
           }
 
           let totalPrice = subtotal - discountAmount;
-
-          // Update UI for total price
           $('#totalPrice').text('₹' + totalPrice.toFixed(2));
 
           // Update UI for coupon price
@@ -553,88 +526,6 @@ function applyCoupon() {
   });
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-// function applyCoupon() {
-//     console.log('Button clicked!');
-//   // Assuming you have a text input for coupon code with id 'coupon'
-//   const couponCode = document.getElementById('coupon').value;
-
-//   // AJAX request to apply the coupon
-//   $.ajax({
-//     url: '/apply-coupon',
-//     method: 'post',
-//     data: { couponCode },
-//     success: function (response) {
-      
-//       if (response.discountAmount ) {
-//         // Update UI with the discount amount
-//         let discountAmount = parseFloat(response.discountAmount);
-//         let discountElement = document.getElementById('couponPrice');
-//         if (discountElement) {
-//           discountElement.innerHTML = '₹' + discountAmount.toFixed(2);
-//         }
-
-//         console.log(discountAmount,"discount");
-
-//         if(response.subtotal){
-//         let subtotal = parseFloat(response.subtotal);
-//         let totalPrice = subtotal - discountAmount ;
-//         console.log(subtotal,"subtotal ");
-//         console.log(totalPrice," : Total");
-//         let totalElement = document.getElementById('totalPrice');
-//         if(totalElement){
-//           totalElement.innerHTML = '₹' + totalPrice.toFixed(2);
-
-//         }
-
-
-        
-        
-//         console.log("total price :" , totalPrice);
-//       }
-
-       
-
-//         // let totalPrice = subtotal - discountAmount;
-//         // $('#totalPrice').text('₹' + totalPrice.toFixed(2));
-
-//         // Update UI for coupon price
-//         let couponPriceElement = document.getElementById('couponPrice');
-//         if (couponPriceElement) {
-//           couponPriceElement.innerHTML = '₹' + discountAmount.toFixed(2);
-//         }
-//       } else {
-//         // Handle case when no discount is applied
-//         console.log('No discount applied.');
-//       }
-
-
-      
-
-
-//     },
-//     error: function (error) {
-//       console.error('Error applying coupon:', error.responseText);
-//     }
-//   });
-
- 
-  
-// }
-
-
-  
 </script>
   
 
@@ -651,8 +542,6 @@ function applyCoupon() {
     const cState = $("#c_state").val();
     const cPostalZip = $("#c_postal_zip").val();
 
-    console.log(cCountry,cState,cPostalZip);
-    console.log("jjjjjjjjjjjj");
 
     const addressData = {
       name: cName,
@@ -674,13 +563,8 @@ function applyCoupon() {
           icon: 'success',
           title: 'Address Added!',
           text: 'Your address has been successfully added.',
-        }).then(() => {
-          // You can perform additional actions after the user clicks 'OK'
-          console.log('Address added successfully:', data);
-          // alert('Address added successfully');
-          
+        }).then(() => {          
           location.reload();
-
         });
       },
       error: function (error) {
@@ -701,8 +585,8 @@ function applyCoupon() {
     $(document).ready(function () {
 
       let paymentMethod = null;
-        // Handle form submission
-        $(document).on('click', '#cashOnDeliveryRadio', function () {
+
+    $(document).on('click', '#cashOnDeliveryRadio', function () {
     paymentMethod = 'cashOnDelivery'; // Set the payment method to 'cashOnDelivery'
     alert('You selected Cash On Delivery payment ');
     // You can add more logic for handling Cash On Delivery here
@@ -719,32 +603,29 @@ $(document).on('click', '#walletRadio', function () {
     alert('You selected Wallet');
   });
 
-        console.log("Document ready!");
+  $(document).on('click', '#placeOrderButton', function () {
+        if (paymentMethod === null) {
+            alert('Please select a payment method.');
+            return;
+        }
+    });
+
+  
+
+
 
         $("#Checkout-form").submit(function (e) {
-            e.preventDefault(); // Prevent the default form submission
-            if (paymentMethod === null) {
-        alert('Please select a payment method.'); // Show an alert if no payment method is selected
-        return; // Stop form submission
-            }
-
-            
+            e.preventDefault(); 
+           
             const couponCode = document.getElementById('coupon').value;
             const formData = $('#Checkout-form').serialize() + `&couponCode=${couponCode}`;
-
-            // const formData = $('#Checkout-form').serialize();
-            
-
-            console.log("Form submitted");
 
             $.ajax({
                 url: '/place-order',
                 method: 'post',
                 data: formData,
                 success: function (response) {
-                  console.log(formData,"show this");
                     if (response.success) {
-                        console.log("yes it is");
                         if (paymentMethod === 'razorPay') {
                            
                             var options = {
@@ -754,10 +635,10 @@ $(document).on('click', '#walletRadio', function () {
                                 "name": response.product_name,
                                 "order_id": response.orderId,
                                 "handler": function (response) {
-  alert('Payment Success...');
-  verifyPayment(response);
-  window.location.href = '/thanks'; // Redirect after successful payment
-},
+                                alert('Payment Success...');
+                                verifyPayment(response);
+                                window.location.href = '/thanks'; 
+                              },
                                 "prefill": {
                                     "name": response.name,
                                     "email": response.email,
@@ -774,15 +655,11 @@ $(document).on('click', '#walletRadio', function () {
                             var razorPayObject = new Razorpay(options);
                             razorPayObject.on('payment.failed', function (response) {
                                 alert("Payment Failed");
-                                // Perform actions for a failed payment, e.g., show an error message
                             });
 
                             razorPayObject.open();
 
-                            
-
                             function verifyPayment(response) {
-                              console.log("yes it's");
                               $.ajax({
         url: '/verifyPayment',
         method: 'post',
@@ -817,12 +694,10 @@ $(document).on('click', '#walletRadio', function () {
                       url: '/removeCartData',
                       method: 'delete',
                       success: function (removeResponse) {
-                          console.log('Cart data removed:', removeResponse);
-                          // window.location.href = '/thanks';
                       },
                       error: function (removeError) {
                           console.error('Error removing cart data:', removeError);
-                          window.location.href = '/404'; // Redirect even on error (adjust as needed)
+                          // window.location.href = '/404';
                       }
                   });
                         }else if(paymentMethod === 'cashOnDelivery'){
@@ -832,7 +707,6 @@ $(document).on('click', '#walletRadio', function () {
                       url: '/removeCartData',
                       method: 'delete',
                       success: function (removeResponse) {
-                          console.log('Cart data removed:', removeResponse);
                           window.location.href = '/thanks';
                       },
                       error: function (removeError) {
@@ -844,15 +718,12 @@ $(document).on('click', '#walletRadio', function () {
                         }
                         else if (paymentMethod === 'wallet') {
     const totalAmount = parseFloat($('#totalAmount').text()); 
-                          console.log("startttttt");
     $.ajax({
         url: '/walletPaymentVerify',
         method: 'post',
         
         success: function (response) {
-          console.log(response,"jauaaa");
             if (response.success) {
-                console.log("Product purchased with wallet amount");
                 alert("Order Placed Successfully");
                 $.ajax({
                       url: '/removeCartData',
