@@ -516,37 +516,40 @@ function setDefaultAddress(addressId) {
                     <div>
                       <div class="col-md-12">
                         <label for="name" class="text-black">Name <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="name<%= address.id %>" name="name" value="<%= address.name %>">
+                        <input type="text" class="form-control" id="name<%= address.id %>" name="name" value="<%= address.name %>" required>
+                        
                       </div>
                     </div>
+                
                     <div>
                       <div class="col-md-12">
                         <label for="number" class="text-black">Phone</label>
-                        <input type="text" class="form-control" id="number<%= address.id %>" name="number" value="<%= address.phoneNumber %>">
+                        <input type="number" class="form-control" id="number<%= address.id %>" name="number" value="<%= address.phoneNumber %>" required>
                       </div>
                     </div>
-                    <!-- Add similar input fields for other address properties -->
+                  
                     <div>
                       <div class="col-md-12">
                         <label for="email" class="text-black">Email Address</label>
-                        <input type="text" class="form-control" id="email<%= address.id %>" name="email" value="<%= address.email %>">
+                        <input type="email" class="form-control" id="email<%= address.id %>" name="email" value="<%= address.email %>" required>
                       </div>
                     </div>
+                   
                     <div>
                       <div class="col-md-12">
                         <label for="address" class="text-black">Address <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="address<%= address.id %>" name="address" placeholder="Street address" value="<%= address.address %>">
+                        <input type="text" class="form-control" id="address<%= address.id %>" name="address" placeholder="Street address" value="<%= address.address %>" required>
                       </div>
                     </div>
                     <div>
                       <div class="col-md-12">
                         <label for="country" class="text-black">Country <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="country<%= address.id %>" name="country" value="<%= address.country %>">
+                        <input type="text" class="form-control" id="country<%= address.id %>" name="country" value="<%= address.country %>" required>
                       </div>
                     </div>
                     <div class="col-md-12">
                       <label for="state" class="text-black">State <span class="text-danger">*</span></label>
-                      <select id="state<%= address.id %>" class="form-control" name="state">
+                      <select id="state<%= address.id %>" class="form-control" name="state" required>
                         <option value="<%= address.state %>">Select a State</option>
                         <option value="Andhra Pradesh">Andhra Pradesh</option>    
                         <option value="Arunachal Pradesh">Arunachal Pradesh</option>    
@@ -588,9 +591,10 @@ function setDefaultAddress(addressId) {
                     <div class="form-group">
                       <div class="col-md-12">
                         <label for="postal_zip" class="text-black">Postal / Zip <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="postal_zip<%= address.id %>" name="postal_zip" value="<%= address.postalZip %>">
+                        <input type="number" class="form-control" id="postal_zip<%= address.id %>" name="postal_zip" value="<%= address.postalZip %>" required>
                       </div>
                     </div>
+                
                   </div>
                 </div>
                 <div class="modal-footer">
@@ -601,12 +605,13 @@ function setDefaultAddress(addressId) {
             </div>
           </div>
         </div>
-      <% }); %>
-    <% } else { %>
-      <!-- <p>No addresses found.</p> -->
-    <% } %>
+    
     
     <script>
+
+
+
+
       function editAddress(button) {
         const id = $(button).data('id');
         const cName = $("#name" + id).val();
@@ -617,6 +622,17 @@ function setDefaultAddress(addressId) {
         const cState = $("#state" + id).val();
         const cPostalZip = $("#postal_zip" + id).val();
     
+
+        if (cName === "" || cNumber === "" || cEmail === "" ||  cMiniAddress === "" || cCountry ==="" || cState ==="" || cPostalZip === ""  ) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Fields Required',
+            text: 'Please fill in all required fields.'
+          });
+          return; // Exit the function
+        }
+
+
         const addressData = {
           id: id,
           name: cName,
@@ -654,7 +670,10 @@ function setDefaultAddress(addressId) {
       }
     </script>
     
-
+    <% }); %>
+    <% } else { %>
+      <!-- <p>No addresses found.</p> -->
+    <% } %>
 
 
 

@@ -927,7 +927,7 @@ export const contacttMail = async (req, res) => {
     console.log(error.message);
     res.status(500).json({ message: 'An error occurred while processing your request', error: error.message });
   }
-};
+}; 
 
 
 export const getCart = async(req,res)=>{
@@ -941,7 +941,7 @@ export const getCart = async(req,res)=>{
       const objectId = new ObjectId(userId);
       const userData = await db.collection(user).findOne({ _id: objectId });
 
-      if (userData.cart && userData.wishlist) {
+      if (userData?.cart && userData?.wishlist) {
        let cartCount = userData.cart.length;
        let wishlistCount = userData.wishlist.length;
         const coupon = COUPON_COLLECTION;        
@@ -953,17 +953,7 @@ export const getCart = async(req,res)=>{
     }else{
       res.render('log-in');
     }
-    
 
-    
-
-
-
-    
-
-    
-
-    
   } catch (error) {
     console.log(error.message);
   }
