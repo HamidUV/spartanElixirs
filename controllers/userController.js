@@ -87,7 +87,6 @@ const sendResetPasswordMail = async(name,email,token)=>{
             subject: "For reset-password",              
             html:
             `<p>Hii ${name} Please click here to <a href="https://spartanelixirs.shop/forget-password?token=${token}">reset</a> your password.</p>`,
-            
               
           }; 
           
