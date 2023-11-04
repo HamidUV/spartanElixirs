@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import session from 'express-session';
 import {sessionSecret} from '../config/collection.js';
 
+
 const user_router = express();
 user_router.use(bodyParser.json());
 user_router.use(bodyParser.urlencoded({ extended: true }));
@@ -11,8 +12,6 @@ import {isLogin} from '../middlewares/user-auth.js';
 import { loadRegister, insertUser, verifyMail , loginLoad , verifyLogin , loadHome , userLogout , forgetLoad , forgetPassword , forgetPasswordLoad , resetPassword , verificationLoad  , sendVerificationLink , loadUserProfile , loadShop , categoryPage ,
      loadAbout , loadContact, getCategoryData , loadSingleProduct, contacttMail, addToCart  , getCart, getWishlist ,RcartProduct, changeQuantity, changeTotalPrice, changeCheckoutPrice, getCheckOut, addToWishlist,
       removeProductFromWishlist, applyCoupon, addAddress,  removeAddress, getUserAddressPage, setDefaultAddress, editAddress,  placeOrder, loadThanksPage, loadOrders, userOrders, removeCart, verifyPayment, returnProduct, walletPaymentVerify, sortProducts} from '../controllers/userController.js';
-
-
 
 user_router.use(session({secret: sessionSecret}));
 
@@ -87,5 +86,7 @@ user_router.get('/userOrders/:orderId',userOrders);
 user_router.post('/returnProduct/:orderId', returnProduct );
 
 user_router.post('/walletPaymentVerify', walletPaymentVerify);
+
+
 
 export default user_router;

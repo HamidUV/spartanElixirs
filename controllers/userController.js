@@ -677,7 +677,10 @@ export const categoryPage = async(req,res)=>{
       if (userData.cart) {
         cartCount = userData.cart.length;
       }
-      let wishlistCount = userData.wishlist.length;
+
+      // let wishlistCount = userData.wishlist.length;
+      let wishlistCount = userData.wishlist ? userData.wishlist.length : 0;
+      
       res.render('categories',{categoryData,userData, Count:cartCount , wishlistCount , userId});
     }else{
       res.render('categories',{categoryData , userId});
@@ -815,18 +818,24 @@ export const loadAbout = async(req,res)=>{
     const user = USER_COLLECTION;
     const db = getDb();
     let cartCount = 0;
+    let wishlistCount = 0;
         
     if (userId) {
       const objectId = new ObjectId(userId);
       const userData = await db.collection(user).findOne({ _id: objectId });
+      
       if (userData.cart) {
         cartCount = userData.cart.length;
       }
-    }
-    const objectId = new ObjectId(userId);
-    const userData = await db.collection(user).findOne({ _id: objectId });
-    let wishlistCount = userData.wishlist.length;
+    
+    
+    
+    let wishlistCount = userData.wishlist ? userData.wishlist.length : 0;
     res.render('about',{Count : cartCount , userData , wishlistCount});
+  }else{
+
+    res.render('about',{Count : cartCount , userData , wishlistCount});
+  }
    
   } catch (error) {
     console.log(error.message);
