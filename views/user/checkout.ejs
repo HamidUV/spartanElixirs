@@ -604,7 +604,7 @@ function applyCoupon() {
 
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-<script>
+<!-- <script>
     $(document).ready(function () {
 
       let paymentMethod = null;
@@ -623,7 +623,7 @@ $(document).on('click', '#walletRadio', function () {
     alert('You selected Wallet');
   });
 
-        $(document).on('click', '#placeOrderButton', function () { if (paymentMethod === null) { alert('Please select a payment method.'); return; } });
+        $(document).on('click', '#placeOrderButton', function () { if (paymentMethod === null ) { alert('Please select a payment method.'); return; } });
 
       
 
@@ -632,13 +632,16 @@ $(document).on('click', '#walletRadio', function () {
 
             const couponCode = document.getElementById('coupon').value;
             const formData = $('#Checkout-form').serialize() + `&couponCode=${couponCode}`;            
-
+            
             $.ajax({
                 url: '/place-order',
                 method: 'post',
                 data: formData,
                 success: function (response) {
                     if (response.success) {
+
+                      
+
                         if (paymentMethod === 'razorPay') {
                            
                             var options = {
@@ -782,9 +785,213 @@ $(document).on('click', '#walletRadio', function () {
 
         // Other JavaScript functionality specific to your page
     });
+</script> -->
+
+
+<script>
+  $(document).ready(function () {
+      let paymentMethod = null;
+
+      $(document).on('click', '#cashOnDeliveryRadio', function () {
+          paymentMethod = 'cashOnDelivery';
+          alert('You selected Cash On Delivery payment');
+      });
+
+      $(document).on('click', '#razorPayRadio', function () {
+          paymentMethod = 'razorPay';
+          alert('You selected RazorPay payment method');
+      });
+
+      $(document).on('click', '#walletRadio', function () {
+          paymentMethod = 'wallet';
+          alert('You selected Wallet');
+      });
+
+      $(document).on('click', '#placeOrderButton', function () {
+          if (paymentMethod === null) {
+              alert('Please select a payment method.');
+              return;
+          }
+
+          // Check if any radio button for addresses has been selected
+          const selectedAddress = document.querySelector('input[name="selectedAddress"]:checked');
+          console.log(selectedAddress,"undoo");
+
+          if (selectedAddress) {
+              // An address has been selected, proceed with the order placement logic
+            console.log("noo");
+              // Collect the necessary data for the order
+              const selectedAddressValue = selectedAddress.value; // Assuming the selected address value contains the address details
+
+              // You may need to gather additional data from your form fields as needed.
+              const couponCode = document.getElementById('coupon').value;
+              const formData = $('#Checkout-form').serialize() + `&couponCode=${couponCode}` + `&paymentMethod=${paymentMethod}`;
+
+              $.ajax({
+                  url: '/place-order', // Replace with your actual endpoint
+                  method: 'post',
+                  data: formData,
+                  success: function (response) {
+                      if (response.success) {
+                        if (response.success) {
+
+                      
+
+if (paymentMethod === 'razorPay') {
+   
+    var options = {
+        "key": response.key_id,
+        "amount": response.amount,
+        "currency": "INR",
+        "name": response.product_name,
+        "order_id": response.orderId,
+        "handler": function (response) {
+alert('Payment Success...');
+verifyPayment(response);
+window.location.href = '/thanks'; 
+},
+        "prefill": {
+            "name": response.name,
+            "email": response.email,
+            "contact": response.contact
+        },
+        "notes": {
+            "address": "Razorpay Corporate Office"
+        },
+        "theme": {
+            "color": "#3399cc"
+        }
+    };
+
+    var razorPayObject = new Razorpay(options);
+    razorPayObject.on('payment.failed', function (response) {
+        alert("Payment Failed");
+    });
+
+    razorPayObject.open();
+    function verifyPayment(response) {
+      $.ajax({
+url: '/verifyPayment',
+method: 'post',
+data: {
+razorpay_payment_id: response.razorpay_payment_id,
+razorpay_order_id: response.razorpay_order_id,
+razorpay_signature: response.razorpay_signature,
+orderData: response.orderData // If needed
+},
+success: function (verifyResponse) {
+if (verifyResponse.success) {
+location.href = '/thanks';
+} else {
+alert('Payment verification failed.');
+}
+},
+error: function (verifyError) {
+console.error('Error verifying payment:', verifyError);
+}
+});
+}
+
+
+
+
+
+
+
+
+    $.ajax({
+url: '/removeCartData',
+method: 'delete',
+success: function (removeResponse) {
+  console.log('Cart data removed:', removeResponse);
+
+},
+error: function (removeError) {
+  console.error('Error removing cart data:', removeError);
+  window.location.href = '/404'; // Redirect even on error (adjust as needed)
+}
+});
+}else if(paymentMethod === 'cashOnDelivery'){
+  alert("Order Placed Successfully");
+  
+  $.ajax({
+url: '/removeCartData',
+method: 'delete',
+success: function (removeResponse) {
+  console.log('Cart data removed:', removeResponse);
+  window.location.href = '/thanks';
+},
+error: function (removeError) {
+  console.error('Error removing cart data:', removeError);
+  window.location.href = '/404'; // Redirect even on error (adjust as needed)
+}
+});
+
+}
+else if (paymentMethod === 'wallet') {
+const totalAmount = parseFloat($('#totalAmount').text()); 
+  console.log("startttttt");
+$.ajax({
+url: '/walletPaymentVerify',
+method: 'post',
+
+success: function (response) {
+console.log(response,"jauaaa");
+if (response.success) {
+console.log("Product purchased with wallet amount");
+alert("Order Placed Successfully");
+$.ajax({
+url: '/removeCartData',
+method: 'delete',
+success: function (removeResponse) {
+  console.log('Cart data removed:', removeResponse);
+  window.location.href = '/thanks';
+},
+error: function (removeError) {
+  console.error('Error removing cart data:', removeError);
+  window.location.href = '/404'; // Redirect even on error (adjust as needed)
+}
+});
+
+} else {
+alert('Product purchasing failed');
+
+}
+},
+error: function (error) {
+console.error('Error making wallet payment:', error);
+// Handle errors (e.g., show an error message)
+}
+});
+
+
+
+}
+
+} 
+                      } else {
+                          // Handle the case where order placement was not successful, e.g., show an error message
+                          alert('Order placement failed: ' + response.message);
+                      }
+                  },
+                  error: function (error) {
+                      // Handle any errors that occur during the order placement request
+                      // console.error('Error placing order:', error);
+                      // You can also show an error message to the user here
+                      alert('Error placing the order. Please try again later.');
+                  }
+              });
+          } else {
+              // No address selected, show an alert to the user
+              alert('Please choose an address before placing the order.');
+              
+          }
+      });
+
+      // Your existing code for handling RazorPay and Wallet payments
+      // ...
+  });
 </script>
-
-
 
   
 

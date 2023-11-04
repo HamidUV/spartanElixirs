@@ -249,7 +249,7 @@ export const loadHome = async (req, res) => {
       const objectId = new ObjectId(userId);
       const userData = await db.collection(user).findOne({ _id: objectId });
       console.log("sttt");
-      if (userData.cart && userData.wishlist) {
+      if (userData.cart || userData.wishlist) {
 
          
          let cartCount = userData.cart ? userData.cart.length : 0;
@@ -1590,7 +1590,7 @@ export const placeOrder = async (req, res) => {
     }
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({ error: error.message });
+    // res.status(500).json({ error: error.message });
   }
 };
 
