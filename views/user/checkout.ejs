@@ -618,10 +618,31 @@ $(document).on('click', '#razorPayRadio', function () {
     alert('You selected RazorPay payment method');
 });
 
+
 $(document).on('click', '#walletRadio', function () {
-    paymentMethod = 'wallet'; 
-    alert('You selected Wallet');
-  });
+    
+if(paymentMethod = 'wallet'){
+  const walletAmount = parseFloat($('p[style="font-weight: 600;"]').text().match(/\d+\.\d+/));
+    const productTotalPrice = parseFloat($('#totalPrice strong').text().match(/\d+\.\d+/));
+
+    if (walletAmount >= productTotalPrice) {
+        paymentMethod = 'wallet';
+        alert('You selected Wallet');
+    } else {
+        alert('Insufficient wallet balance. Please choose another payment method');
+        // Optionally, you can also deselect the 'Wallet' payment method here
+    }
+  }
+});
+
+
+
+
+
+// $(document).on('click', '#walletRadio', function () {
+//     paymentMethod = 'wallet'; 
+//     alert('You selected Wallet');
+//   });
 
         $(document).on('click', '#placeOrderButton', function () { if (paymentMethod === null ) { alert('Please select a payment method.'); return; } });
 
