@@ -852,6 +852,7 @@ export const loadContact = async(req,res)=>{
     const user = USER_COLLECTION;
     const db = getDb();
     let cartCount = 0;
+    let wishlistCount = 0;
         
     if (userId) {
       const objectId = new ObjectId(userId);
@@ -859,11 +860,16 @@ export const loadContact = async(req,res)=>{
       if (userData.cart) {
         cartCount = userData.cart.length;
       }
-    }
+    
+    
+    let wishlistCount = userData.wishlist ? userData.wishlist.length : 0;
+    res.render('contact',{Count : cartCount , userData, wishlistCount});
+  }else{
     const objectId = new ObjectId(userId);
     const userData = await db.collection(user).findOne({ _id: objectId });
-    let wishlistCount = userData.wishlist.length;
+    
     res.render('contact',{Count : cartCount , userData, wishlistCount});
+  }
   } catch (error) {
     console.log(error.message);
   }
@@ -933,7 +939,7 @@ export const contacttMail = async (req, res) => {
     const objectId = new ObjectId(userId);
     const userData = await db.collection(user).findOne({ _id: objectId });
     const wishlist = userData.wishlist;
-    const wishlistCount = userData.wishlist.length;
+    let wishlistCount = userData.wishlist ? userData.wishlist.length : 0;
     res.render('contact',{userData ,wishlistCount , Count :cartCount, message: "Email sent successfully" });
 
     } else {
