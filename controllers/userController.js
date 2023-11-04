@@ -711,6 +711,7 @@ export const getCategoryData = async (req, res) => {
     const objectId = new ObjectId(userId);
     const userData = await db.collection(user).findOne({ _id: objectId });
     let cartCount = 0;
+    let wishlistCount = 0 ;
     
     if (userId) {
       const objectId = new ObjectId(userId);
@@ -718,10 +719,11 @@ export const getCategoryData = async (req, res) => {
       if (userData.cart) {
         cartCount = userData.cart.length;
       }
-      let wishlistCount = userData.wishlist.length;
+      // let wishlistCount = userData.wishlist.length;
+      let wishlistCount = userData.wishlist ? userData.wishlist.length : 0;
       res.render('singleCategory', { categoryName, categoryData, productData , userData  , Count: cartCount , wishlistCount , userId});
     }else{
-      res.render('singleCategory' ,{userId,categoryData,productData});
+      res.render('singleCategory' ,{userId,categoryData,productData, wishlistCount});
     } 
   } catch (error) {
     console.error(error);
