@@ -57,7 +57,7 @@ export const Storage = diskStorage({
   filename: (req, file, cb) => {
     cb(null, new Date() + file.originalname);
   },
-});
+}); 
 
 // Create the upload middleware using multer
 export const upload = multer({

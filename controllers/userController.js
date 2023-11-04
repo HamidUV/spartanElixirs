@@ -248,15 +248,21 @@ export const loadHome = async (req, res) => {
     if (userId) {
       const objectId = new ObjectId(userId);
       const userData = await db.collection(user).findOne({ _id: objectId });
-      
+      console.log("sttt");
       if (userData.cart && userData.wishlist) {
-        cartCount = userData.cart.length;
-        wishlistCount = userData.wishlist.length; // Update wishlistCount
+
+         
+         let cartCount = userData.cart ? userData.cart.length : 0;
+        console.log(cartCount,"carrrrrrtt");
+        let wishlistCount = userData.wishlist ? userData.wishlist.length : 0;
+        console.log("wisg",wishlistCount);
+        res.render('home', { bannerData, categoryData, productData, Count: cartCount, userData, wishlistCount,userId });
       }
+      console.log(cartCount);
       res.render('home', { bannerData, categoryData, productData, Count: cartCount, userData, wishlistCount,userId });
     }else{
       
-      res.render('home' ,{ userId, bannerData, categoryData, productData , wishlistCount} );
+      res.render('home' ,{ userId, bannerData, userData , categoryData, productData , wishlistCount} );
     } 
 
   } catch (error) {
@@ -930,34 +936,8 @@ export const contacttMail = async (req, res) => {
 }; 
 
 
-export const getCart = async(req,res)=>{
-  try {
 
-    const db = getDb();
-    const user = USER_COLLECTION;
-    const userId = req.session.userId;
-    
-    if (userId) {
-      const objectId = new ObjectId(userId);
-      const userData = await db.collection(user).findOne({ _id: objectId });
 
-      if (userData?.cart && userData?.wishlist) {
-       let cartCount = userData.cart.length;
-       let wishlistCount = userData.wishlist.length;
-        const coupon = COUPON_COLLECTION;        
-        const couponData = await db.collection(coupon).find();  
-      
-      res.render('cart',{ Cart : userData.cart , Count :cartCount  , userData , wishlistCount ,couponData}  );
-      }
-
-    }else{
-      res.render('log-in');
-    }
-
-  } catch (error) {
-    console.log(error.message);
-  }
-}
 
 
 
@@ -996,7 +976,7 @@ if (productQuantity === 0) {
 }
 
 
-    const existingProductIndex = userData.cart.findIndex(product => product.productId.equals(object_id));
+    const existingProductIndex = await userData.cart.findIndex(product => product.productId.equals(object_id));
 
     if (existingProductIndex !== -1) {
       userData.cart[existingProductIndex].quantity += 1;
@@ -1013,10 +993,10 @@ if (productQuantity === 0) {
 
     // Update the user document with the modified cart
     const updateResult = await db.collection(user).updateOne({ _id: objectId }, { $set: { cart: userData.cart } });
-
+    console.log("work aanu");
     // Get the count after the update
     const cartCount = userData.cart.length;
-
+    console.log(cartCount,"????");
     if (updateResult.modifiedCount === 1) {
       return res.json({Cart: userData.cart, Count: cartCount , userData:userData});
 
@@ -1027,6 +1007,43 @@ if (productQuantity === 0) {
     console.log(error.message);
   }
 };
+
+
+
+export const getCart = async(req,res)=>{
+  try {
+
+    const db = getDb();
+    const user = USER_COLLECTION;
+    const userId = req.session.userId;
+      console.log("working");
+    if (userId) {
+      const objectId = new ObjectId(userId);
+      const userData = await db.collection(user).findOne({ _id: objectId });
+      console.log("ok");
+     
+    
+      if (userData.cart || userData.wishlist) {
+        console.log("id here?");
+       let cartCount = userData.cart.length;
+       console.log(cartCount,"????");
+       let wishlistCount = userData.wishlist ? userData.wishlist.length : 0;
+       
+        const coupon = COUPON_COLLECTION;        
+        const couponData = await db.collection(coupon).find();        
+      res.render('cart',{ Cart : userData.cart , Count :cartCount  , userData , wishlistCount ,couponData}  );
+      }
+
+
+
+
+    }else{
+      res.render('log-in');
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+}
 
 
 
@@ -1238,12 +1255,13 @@ export const getWishlist = async(req,res)=>{
     if (userId) {
       const objectId = new ObjectId(userId);
       const userData = await db.collection(user).findOne({ _id: objectId });
+
       if (userData.cart) {
         cartCount = userData.cart.length;
       }
 
-      const wishlist = userData.wishlist
-      let wishlistCount = userData.wishlist.length;
+      const wishlist = userData.wishlist ;
+      let wishlistCount = userData.wishlist ? userData.wishlist.length : 0;
       res.render('wishlist',{userData, Count:cartCount , wishlist , wishlistCount});
     }else{
       res.redirect('/login');
@@ -1346,9 +1364,9 @@ export const getCheckOut = async (req, res) => {
       const objectId = new ObjectId(userId);
       const userData = await db.collection(user).findOne({ _id: objectId });
 
-      if (userData.cart && userData.wishlist) {
+      if (userData.cart || userData.wishlist) {
         const cartCount = userData.cart.length;
-        const wishlistCount = userData.wishlist.length;
+        const wishlistCount = userData.wishlist ? userData.wishlist.length : 0;
         const coupon = COUPON_COLLECTION;
         const couponData = await db.collection(coupon).find();
         const discountAmount = couponData.price;
@@ -1432,7 +1450,7 @@ export const placeOrder = async (req, res) => {
       return res.status(400).json({ error: "Your cart is empty. Please add products to your cart." });
     }
 
-    if (cart && userData.wishlist) {
+    if (cart || userData.wishlist) {
       const subtotal = userData.cart.reduce((total, product) => total + product.quantity * product.price, 0);
       const defaultAddress = userData.address.find(address => address.default === true);
       const productDetails = cart.map(product => ({

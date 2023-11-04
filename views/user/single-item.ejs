@@ -1,140 +1,221 @@
 <%- include('../layout/userLayout/userHeaderMini.ejs') %>
 
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-  integrity="sha384-pzjw8s+Mm1zZuP6H4Knj3kTG5E5JLlcew+uvWpjQkPrBnq9vFLnqz7u5krG1aD44"
-  crossorigin="anonymous"
-/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-pzjw8s+Mm1zZuP6H4Knj3kTG5E5JLlcew+uvWpjQkPrBnq9vFLnqz7u5krG1aD44" crossorigin="anonymous">
+
 
 <% productData.forEach((product) => { %>
 <div class="bg-light py-3">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12 mb-0">
-        <a href="/shop" class="border-shadow">
-          <span class="text-gradient"
-            ><i class="fa-solid fa-arrow-left"></i> Go back</span
-          >
-        </a>
-        <strong class="text-black"></strong>
+    <div class="container">
+      <div class="row">
+        
+        <div class="col-md-12 mb-0" >
+          <a href="/shop" class="border-shadow" >
+            <span class="text-gradient"><i class="fa-solid fa-arrow-left"></i> Go back</span>
+          </a>
+           <strong class="text-black" ></strong></div>
+      </div>
+      
+    </div>
+    
+  </div>  
+  
+
+  <div class="site-section">
+    <div class="container">
+      
+      <div class="row">
+
+        
+        <div class="col-md-6">
+          
+            
+            
+       <img src="/images/<%=product.image %>" style="width: 25rem; height: auto;" alt="Image" class="img-fluid">
+       
+        </div>
+        
+        <div class="col-md-6" style="margin-top: 1rem;">
+          <button onclick="addToWishlist('<%=product._id %>')" class="btn btn-outline-success" style="margin-bottom: 6rem; margin-left: 23rem;">Add to wishlist</button>
+          <h2 class="text-black"><%= product.name %></h2>
+          <br>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur, vitae, explicabo? Incidunt facere, natus soluta dolores iusto! Molestiae expedita veritatis nesciunt doloremque sint asperiores fuga voluptas, distinctio, aperiam, ratione dolore.</p>
+          <p class="mb-4">Ex numquam veritatis debitis minima quo error quam eos dolorum quidem perferendis. Quos repellat dignissimos minus, eveniet nam voluptatibus molestias omnis reiciendis perspiciatis illum hic magni iste, velit aperiam quis.</p>
+          <br>
+          
+          <p><strong class="text-primary h4">₹<%= product.price %></strong></p>
+         
+         
+          <!-- <div class="mb-1 d-flex">
+            <label for="option-sm" class="d-flex mr-3 mb-3">
+              <span class="d-inline-block mr-2" style="top:-2px; position: relative;"><input type="radio" id="option-sm" name="shop-sizes"></span> <span class="d-inline-block text-black">Small</span>
+            </label>
+            <label for="option-md" class="d-flex mr-3 mb-3">
+              <span class="d-inline-block mr-2" style="top:-2px; position: relative;"><input type="radio" id="option-md" name="shop-sizes"></span> <span class="d-inline-block text-black">Medium</span>
+            </label>
+            <label for="option-lg" class="d-flex mr-3 mb-3">
+              <span class="d-inline-block mr-2" style="top:-2px; position: relative;"><input type="radio" id="option-lg" name="shop-sizes"></span> <span class="d-inline-block text-black">Large</span>
+            </label>
+            <label for="option-xl" class="d-flex mr-3 mb-3">
+              <span class="d-inline-block mr-2" style="top:-2px; position: relative;"><input type="radio" id="option-xl" name="shop-sizes"></span> <span class="d-inline-block text-black"> Extra Large</span>
+            </label>
+          </div> -->
+          <br>
+          
+          
+          <button onclick="addToCart('<%=product._id %>')" class="buy-now btn btn-block mb-4 btn-primary">Add To Cart</button>
+          <!-- <p><a href="/add-to-cart/<%=product._id %>" class="buy-now btn btn-block mb-4 btn-primary">Add To Cart</a></p> -->
+          <% }); %>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<div class="site-section">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-6">
-        <img
-          src="/images/<%=product.image %>"
-          style="width: 25rem; height: auto"
-          alt="Image"
-          class="img-fluid"
-        />
-      </div>
+  
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  
+  
+  <script>
+    function addToCart(productId) {
+      console.log("WHY?");
+      $.ajax({
+        url: '/add-to-cart/' + productId,
+        method: 'get',
+        dataType: 'json',
+        success: function (res) {
+          console.log(productId,"product Id");
+          console.log(res, 'response....');
+  
+          if (res && res.error) {
+            // Check if the response contains an error message
+            alert(res.message); // Display the error message
+          } else {
+            console.log("work alle");
+            alert('Product added to cart successfully..!');
+            window.location.href = '/cart' ;
+          }
+        },
+        error: function (xhr, status, error) {
+  console.error('AJAX Error:', xhr, status, error);
 
-      <div class="col-md-6" style="margin-top: 1rem">
-        <button
-          onclick="addToWishlist('<%=product._id %>')"
-          class="btn btn-outline-success"
-          style="margin-bottom: 6rem; margin-left: 23rem"
-        >
-          Add to wishlist
-        </button>
-        <h2 class="text-black"><%= product.name %></h2>
-        <br />
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur,
-          vitae, explicabo? Incidunt facere, natus soluta dolores iusto!
-          Molestiae expedita veritatis nesciunt doloremque sint asperiores fuga
-          voluptas, distinctio, aperiam, ratione dolore.
-        </p>
-        <p class="mb-4">
-          Ex numquam veritatis debitis minima quo error quam eos dolorum quidem
-          perferendis. Quos repellat dignissimos minus, eveniet nam voluptatibus
-          molestias omnis reiciendis perspiciatis illum hic magni iste, velit
-          aperiam quis.
-        </p>
-        <br />
-        <p><strong class="text-primary h4">₹<%= product.price %></strong></p>
-        <br />
-
-        <button
-          onclick="addToCart('<%=product._id %>')"
-          class="buy-now btn btn-block mb-4 btn-primary"
-        >
-          Add To Cart
-        </button>
-        <% }); %>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
-<script>
-  function addToCart(productId) {
-    console.log("WHY?");
-    $.ajax({
-      url: "/add-to-cart/" + productId,
-      method: "get",
-      dataType: "json",
-      success: function (res) {
-        console.log(productId, "product Id");
-        
-          alert("Product added to cart successfully..!");
-          window.location.href = "/cart";
-        
-      },
-      error: function (xhr, status, error) {
-        console.error("AJAX Error:", xhr, status, error);
-        alert("Error");
-        if (
-          xhr.responseJSON &&
-          xhr.responseJSON.error &&
-          xhr.responseJSON.message === "Product not in stock"
-        ) {
-          alert("This product is not in stock.");
-          window.location.href = "/shop";
-        } else {
-          alert("Please login and buy products.");
-          window.location.href = "/login";
-        }
-      },
-    });
+  if (xhr.responseJSON && xhr.responseJSON.error && xhr.responseJSON.message === "Product not in stock") {
+    alert('This product is not in stock.');
+    window.location.href = '/shop';
+  } else {
+    alert('Please login and buy products.');
+    window.location.href = '/login';
   }
+}
 
-  function addToWishlist(productId) {
+      });
+    }
+
+
+
+    function addToWishlist(productId) {
     $.ajax({
-      url: "/add-to-wishlist/" + productId,
-      method: "get",
-      dataType: "json",
-      success: function (res) {
-        if (res && res.error) {
+      url: '/add-to-wishlist/' + productId,
+      method: 'get',
+      dataType: 'json',
+      success: function(res){
+        if(res && res.error){
           alert(res.message);
-        } else {
-          alert("Product added to wishlist successfully");
+        }else{
+          alert('Product added to wishlist successfully');
         }
       },
-      error: function (xhr, status, error) {
-        console.error("Ajax Error", xhr, status, error);
-        if (
-          xhr.responseJSON &&
-          xhr.responseJSON.error &&
-          xhr.responseJSON.message === "Product not in stock"
-        ) {
-          alert("This product is not in stock.");
-          window.location.href = "/shop";
+      error:function(xhr,status, error){
+        console.error('Ajax Error', xhr,status,error);
+        if (xhr.responseJSON && xhr.responseJSON.error && xhr.responseJSON.message === "Product not in stock") {
+          alert('This product is not in stock.');
+          window.location.href = '/shop';
         } else {
-          alert("Please login and buy products.");
-          window.location.href = "/login";
+          alert('Please login and buy products.');
+          window.location.href = '/login';
         }
-      },
-    });
+      }
+    })
   }
-</script>
+
+
+
+
+  </script>
+  
+
+  <!-- <div class="site-section block-3 site-blocks-2 bg-light">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-7 site-section-heading text-center pt-4">
+          <h2>Featured Products</h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="nonloop-block-3 owl-carousel">
+            <div class="item">
+              <div class="block-4 text-center">
+                <figure class="block-4-image">
+                  <img src="images/cloth_1.jpg" alt="Image placeholder" class="img-fluid">
+                </figure>
+                <div class="block-4-text p-4">
+                  <h3><a href="#">Tank Top</a></h3>
+                  <p class="mb-0">Finding perfect t-shirt</p>
+                  <p class="text-primary font-weight-bold">$50</p>
+                </div>
+              </div>
+            </div>
+            <div class="item">
+              <div class="block-4 text-center">
+                <figure class="block-4-image">
+                  <img src="images/shoe_1.jpg" alt="Image placeholder" class="img-fluid">
+                </figure>
+                <div class="block-4-text p-4">
+                  <h3><a href="#">Corater</a></h3>
+                  <p class="mb-0">Finding perfect products</p>
+                  <p class="text-primary font-weight-bold">$50</p>
+                </div>
+              </div>
+            </div>
+            <div class="item">
+              <div class="block-4 text-center">
+                <figure class="block-4-image">
+                  <img src="images/cloth_2.jpg" alt="Image placeholder" class="img-fluid">
+                </figure>
+                <div class="block-4-text p-4">
+                  <h3><a href="#">Polo Shirt</a></h3>
+                  <p class="mb-0">Finding perfect products</p>
+                  <p class="text-primary font-weight-bold">$50</p>
+                </div>
+              </div>
+            </div>
+            <div class="item">
+              <div class="block-4 text-center">
+                <figure class="block-4-image">
+                  <img src="images/cloth_3.jpg" alt="Image placeholder" class="img-fluid">
+                </figure>
+                <div class="block-4-text p-4">
+                  <h3><a href="#">T-Shirt Mockup</a></h3>
+                  <p class="mb-0">Finding perfect products</p>
+                  <p class="text-primary font-weight-bold">$50</p>
+                </div>
+              </div>
+            </div>
+            <div class="item">
+              <div class="block-4 text-center">
+                <figure class="block-4-image">
+                  <img src="images/shoe_1.jpg" alt="Image placeholder" class="img-fluid">
+                </figure>
+                <div class="block-4-text p-4">
+                  <h3><a href="#">Corater</a></h3>
+                  <p class="mb-0">Finding perfect products</p>
+                  <p class="text-primary font-weight-bold">$50</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> -->
 
 <%- include('../layout/userLayout/userFooter.ejs') %>
