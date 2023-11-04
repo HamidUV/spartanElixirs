@@ -1452,7 +1452,11 @@ export const placeOrder = async (req, res) => {
 
     if (cart || userData.wishlist) {
       const subtotal = userData.cart.reduce((total, product) => total + product.quantity * product.price, 0);
+      
       const defaultAddress = userData.address.find(address => address.default === true);
+      if(defaultAddress){
+
+      
       const productDetails = cart.map(product => ({
         productId: product.productId,
         productName: product.productName,
@@ -1547,6 +1551,7 @@ export const placeOrder = async (req, res) => {
           paymentType: paymentType,
           cart: cart
         });
+
       } else if(paymentMethod === 'wallet'){
         const walletData = await db.collection(WALLET_COLLECTION).findOne({ userId : new ObjectId(userId)});
         const walletAmount = walletData.totalAmount || 0 ;
@@ -1588,6 +1593,7 @@ export const placeOrder = async (req, res) => {
         }
       }
     }
+  }
   } catch (error) {
     console.error(error.message);
     // res.status(500).json({ error: error.message });
