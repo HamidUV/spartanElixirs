@@ -10,7 +10,6 @@ Spartan Elixirs is a feature-rich e-commerce platform designed for selling perfu
 - **Checkout**: Secure checkout with Razorpay (dummy integration).
 - **Wallet**: Track wallet balance and use it for purchases.
 - **Order Tracking**: Monitor order status in real time.
-- **Email Notifications**: Receive updates for orders and account activities.
 
 ### **For Admins**
 - **Dashboard**: Manage the platform efficiently with an admin dashboard.
